@@ -1,0 +1,46 @@
+<CombineEntry name="Packages" fileversion="2.0" ctype="PackagingProject">
+  <Packages>
+    <Package name="MonoDevelop Project Model Sources">
+      <Builder rootEntry="gladeSharpProject.mds" targetFile="gladeSharpProject-mds.tar.gz" format="MonoDevelop.Projects.MonoDevelopFileFormat" ctype="SourcesZipPackageBuilder">
+        <ChildEntries>
+          <Entry>gladeSharpProject/gladeSharpProject.mdp</Entry>
+        </ChildEntries>
+      </Builder>
+    </Package>
+    <Package name="SharpDevelop 1.0 Project Model Sources">
+      <Builder rootEntry="gladeSharpProject.mds" targetFile="gladeSharpProject-cmbx.tar.gz" format="MonoDevelop.Projects.SharpDevelopFileFormat" ctype="SourcesZipPackageBuilder">
+        <ChildEntries>
+          <Entry>gladeSharpProject/gladeSharpProject.mdp</Entry>
+        </ChildEntries>
+      </Builder>
+    </Package>
+    <Package name="Visual Studio .NET 2005 Sources">
+      <Builder rootEntry="gladeSharpProject.mds" targetFile="gladeSharpProject-sln.tar.gz" format="MonoDevelop.Prj2Make.MSBuildFileFormat" ctype="SourcesZipPackageBuilder">
+        <ChildEntries>
+          <Entry>gladeSharpProject/gladeSharpProject.mdp</Entry>
+        </ChildEntries>
+      </Builder>
+    </Package>
+    <Package name="Linux Binaries">
+      <Builder rootEntry="gladeSharpProject.mds" targetFile="gladeSharpProject-linux.tar.gz" platform="Linux" ctype="BinariesZipPackageBuilder">
+        <ChildEntries>
+          <Entry>gladeSharpProject/gladeSharpProject.mdp</Entry>
+        </ChildEntries>
+      </Builder>
+    </Package>
+    <Package name="Windows Binaries">
+      <Builder rootEntry="gladeSharpProject.mds" targetFile="gladeSharpProject-windows.tar.gz" platform="Windows" ctype="BinariesZipPackageBuilder">
+        <ChildEntries>
+          <Entry>gladeSharpProject/gladeSharpProject.mdp</Entry>
+        </ChildEntries>
+      </Builder>
+    </Package>
+    <Package name="Tarball">
+      <Builder rootEntry="gladeSharpProject.mds" TargetDirectory="/home/jonathan/Prods/prog/PT1/gladeSharpProject/gladeSharpProject" DefaultConfiguration="Debug" ctype="TarballDeployTarget">
+        <ChildEntries>
+          <Entry>gladeSharpProject/gladeSharpProject.mdp</Entry>
+        </ChildEntries>
+      </Builder>
+    </Package>
+  </Packages>
+</CombineEntry>
