@@ -1,0 +1,1408 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+
+
+
+
+
+	<title>CodeProject: Custom controls with MonoDevelop and GTK#. Free source code and programming help</title>
+	
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="Description" content="Movable controls with customized rendering on Linux with Mono.; Author: Olivier Lecointre; Section: Static &amp; Panel Controls; Chapter: Desktop Development">
+<meta name="Keywords" content=".NET 2.0, Mono, C# 2.0, C#, .NET, Dev, Design, Intermediate,Static &amp; Panel Controls,Desktop Development,Free source code, tutorials">
+<meta name="Author" content="The Code Project">
+<meta name="Rating" content="General">
+<meta name="Robots" content="index, follow">
+<meta name="Revisit-After" content="1 days">
+<link rel="alternate" type="application/rss+xml" title="CodeProject Latest articles - All topics" href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1">
+<link rel="alternate" type="application/rss+xml" title="CodeProject Latest articles - MFC / C++" href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2">
+<link rel="alternate" type="application/rss+xml" title="CodeProject Latest articles - C#" href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3">
+<link rel="alternate" type="application/rss+xml" title="CodeProject Latest articles - ASP.NET" href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4">
+<link rel="alternate" type="application/rss+xml" title="CodeProject Latest articles - .NET" href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5">
+<link rel="alternate" type="application/rss+xml" title="CodeProject Latest articles - VB.NET" href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6">
+<link rel="alternate" type="application/rss+xml" title="CodeProject Lounge Postings" href="http://www.codeproject.com/webservices/LoungeRSS.aspx">
+<link rel="search" type="application/opensearchdescription+xml" title="CodeProject" href="http://www.codeproject.com/info/OpenSearch.xml">
+	<link rel="stylesheet" type="text/css" href="customgtkcontrol.aspx_files/CodeProject.css">	
+	<link rel="stylesheet" type="text/css" href="customgtkcontrol.aspx_files/ForumClassic.css">	
+	<!-- base -->
+	
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="customgtkcontrol.aspx_files/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+   var pageTracker = _gat._getTracker("UA-1735123-1");
+   pageTracker._setDomainName("www.codeproject.com");
+   pageTracker._setSessionTimeout("1200"); // 20 mins
+   pageTracker._initData();
+   pageTracker._trackPageview();
+</script>
+	
+	<script type="text/javascript" language="Javascript">//<![CDATA[
+if(top!=self)top.location.href=location.href; if(typeof(DemoUrl)!="undefined")document.write(unescape('%3Cme')+'ta http'+'-equiv="re' +'fresh" con'+'tent="1;url='+DemoUrl+unescape('"%3CE'));
+//]]></script>
+
+<script type="text/javascript" language="Javascript" src="customgtkcontrol.aspx_files/oncopy.js"></script>
+<script type="text/javascript" language="Javascript" src="customgtkcontrol.aspx_files/JobsSummaryRetriever.js"></script>
+<script type="text/javascript" language="Javascript" src="customgtkcontrol.aspx_files/jquery-1.js"></script>
+<script type="text/javascript" language="Javascript" src="customgtkcontrol.aspx_files/addto.js"></script>
+<script type="text/javascript" language="Javascript">//<![CDATA[
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+//]]></script>
+
+<script type="text/javascript" language="Javascript" src="customgtkcontrol.aspx_files/rateitem.js"></script>
+<script type="text/javascript" language="Javascript">//<![CDATA[
+function ChkRt(val) { if (val<=2) {$('#RateComDiv').css("display","");}else $('#RateComDiv').css("display","none");}
+//]]></script>
+
+<script type="text/javascript" language="Javascript">//<![CDATA[
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  if (!msgId) {
+    if(!e)e=window.event;
+    var target=e.target?e.target:e.srcElement;
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    msgId=target.name;
+  }
+  if(Selected&&Selected!=""){
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body) body.style.display = 'none';
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if(head) head.className = head.className.replace("Sel", "UnSel");
+  }
+  if(Selected==msgId.toString())
+    Selected="";
+  else {
+    Selected=msgId.toString();
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body){
+      if(body.style.display=='none') body.style.display='';
+      else body.style.display = 'none';
+    }
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if (head) 
+      head.className = head.className.replace("UnSel", "Sel");
+    if(body&&head&&body.style.display!='none'){
+      document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+      EnsureMessageVisible(Selected, true);
+    }
+  }
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+//]]></script>
+
+<script type="text/javascript" language="Javascript" src="customgtkcontrol.aspx_files/ShortCuts.js"></script>
+<link rel="icon" href="http://www.codeproject.com/favicon.ico" type="image/ico">
+<link rel="shortcut icon" href="http://www.codeproject.com/favicon.ico" type="image/ico">
+
+</head><body style="background-color: rgb(255, 255, 255);">
+
+<table id="ctl00_AT" border="0" cellpadding="0" cellspacing="0">
+	<tbody><tr valign="top">
+		<td colspan="2">
+	<table border="0" cellpadding="0" cellspacing="0">
+	<tbody><tr>
+		<td class="HeaderLogo"><a href="http://www.codeproject.com/"><img id="ctl00_Logo" src="customgtkcontrol.aspx_files/logo225x90.gif" alt="The Code Project" style="border-width: 0px; height: 90px; width: 225px;"></a></td>				 
+		<td class="HeaderBanner" align="right" width="100%">
+		<iframe src="customgtkcontrol.aspx_files/ServeHTML.html" frameborder="0" height="90" scrolling="no" width="728"></iframe></td>
+	</tr>
+	<tr><td colspan="2">
+
+<table class="MemberNavBar" cellpadding="5" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="SmallText" style="font-weight: bold;">5,683,321 members and growing! (18,403 online)</td>
+<td align="right">
+
+
+
+<div id="ctl00_MemberMenu_LoggedOffOptions" class="MemberNavBarText" style="margin: 0pt; padding: 0pt;">
+			<a name="SignUp"></a>
+<form name="subForm" id="subForm" action="/script/Membership/LogOn.aspx?rp=%2fKB%2fstatic%2fcustomgtkcontrol.aspx" method="post" style="margin: 0pt; padding: 0pt;">
+Email    <input class="SmallText" name="Email" id="Email" style="width: 100px;" type="text">
+Password <input class="SmallText" name="Password" id="Password" style="width: 60px;" type="password">
+<input value="Sign in" class="FormButton" type="submit">
+<script type="text/javascript">
+function Join(){document.location.href='/script/Membership/Modify.aspx';return false;}
+document.write('<input type="button" class="FormButton" onclick="return Join();" value="Join"');
+document.write('<input type="hidden" name="fld_quicksign" value="true" />');
+</script><input class="FormButton" onclick="return Join();" value="Join" type="button"><input name="fld_quicksign" value="true" type="hidden">
+<input checked="checked" name="cookie" id="RememberMeCheck" type="checkbox">
+<label for="RememberMeCheck">Remember me?</label>&nbsp;
+<a id="ctl00_MemberMenu_SendPassword" href="http://www.codeproject.com/script/Membership/SendPassword.aspx?rp=%2fKB%2fstatic%2fcustomgtkcontrol.aspx"><img alt="help" src="customgtkcontrol.aspx_files/help.gif" align="middle" border="0" height="16" width="16">Lost your password?</a>
+</form>
+
+		</div>
+
+</td>
+</tr>
+</tbody></table></td></tr>
+	<tr><td colspan="2">
+<table class="SiteNavBar" id="tblSiteToolbar" cellpadding="0" cellspacing="0">
+<tbody><tr>
+
+<td nowrap="nowrap"><a href="http://www.codeproject.com/">Home</a></td><td> &nbsp; </td><td style="font-weight: normal;" align="right" nowrap="nowrap">Current Site:</td><td class="SelCat" nowrap="nowrap"><a href="http://www.codeproject.com/">C++ / .NET</a></td>
+<td nowrap="nowrap"><a href="http://java.codeproject.com/">Java</a></td>
+<td nowrap="nowrap"><a href="http://sql.codeproject.com/">SQL</a></td>
+<td nowrap="nowrap"><a href="http://lamp.codeproject.com/">Linux / Unix</a></td>
+
+<td width="100%">&nbsp;</td>
+<td id="ctl00_TopNavBar_RightMenus">
+	<div id="MenuPos" style="position: relative; width: 380px; height: 22px; top: 1px;">
+	<table style="border-width: 0px; height: 20px;" cellpadding="0" cellspacing="0" width="380">
+	<tbody><tr valign="middle">
+	<td style="border-width: 0pt;" nowrap="nowrap"><a href="http://www.codeproject.com/info/FAQ.aspx">Help!</a></td>
+<td style="border-width: 0pt;" nowrap="nowrap"><a href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</a></td>
+<td style="border-width: 0pt;" nowrap="nowrap"><a href="http://www.codeproject.com/script/Forums/List.aspx">Message Boards</a></td>
+<td style="border-width: 0pt;" nowrap="nowrap"><a href="http://www.codeproject.com/script/Jobs/List.aspx">Job Board</a></td>
+<td style="border-width: 0pt;" nowrap="nowrap"><a href="http://www.codeproject.com/Lounge.aspx">Lounge</a></td>
+
+	</tr>
+	</tbody></table>
+	</div>
+</td>
+		
+</tr>
+
+</tbody></table>
+</td></tr>
+	</tbody></table>
+</td>
+	</tr>
+	<tr>
+		<td colspan="2" valign="top">
+		<a name="_top"></a>
+		<table id="ctl00_ArticleTopHeader_HeaderTable" class="ArticleHeader" border="0" cellpadding="3" cellspacing="0" width="100%">
+			<tbody><tr valign="top">
+				<td class="SmallText">
+	<a id="ctl00_ArticleTopHeader_ChapterLink" href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1">Desktop Development</a> »
+	<a id="ctl00_ArticleTopHeader_SectionLink" href="http://www.codeproject.com/KB/static/">Static &amp; Panel Controls</a> »
+	<a id="ctl00_ArticleTopHeader_SubsectionLink" href="http://www.codeproject.com/KB/static/index.aspx?#Static%20&amp;%20Panel%20Controls%20-%20Custom%20Controls">Custom Controls</a>
+	<span id="ctl00_ArticleTopHeader_SkillLevel" class="ArticleIntermediate">&nbsp;&nbsp;&nbsp; Intermediate</span> <span id="ctl00_ArticleTopHeader_LicenceTerms" class="SmallText" style="margin-left: 40px;">License: <a href="http://www.opensource.org/licenses/gpl-license.php">The GNU General Public License (GPL)</a></span>
+	<br><br>
+	<h1><span id="ctl00_ArticleTopHeader_ArticleTitle" class="ArticleTopTitle">Custom controls with MonoDevelop and GTK#</span></h1>
+	<b>By <a href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=1090000">Olivier Lecointre</a></b><br>
+	
+	<br>
+    <span id="ctl00_ArticleTopHeader_ArticleDescr" class="ArticleTopDescr">Movable controls with customized rendering on Linux with Mono.</span>
+</td>
+				<td class="SmallText" style="width: 210px;">
+	<span id="ctl00_ArticleTopHeader_ArticleAttributes">C# (C# 2.0, C#), .NET (.NET, .NET 2.0, Mono), Dev, Design</span><br><br>
+	<span style="width: 14ex;">Posted</span>: <b>18 May 2008</b><br>
+	<span style="width: 14ex;">Updated</span>: <b>18 May 2008</b>
+	<br>
+	<span style="width: 14ex;">Views</span>: <b>11,162</b><br>
+	
+	    <span style="width: 14ex;">Bookmarked</span>: <b>14 times</b><br>
+	    
+	
+</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+	<table width="100%">
+	<tbody><tr>
+	<td></td>
+	<td style="white-space: nowrap;" class="SmallText" align="right">
+	</td>
+	</tr>
+	</tbody></table>
+</td>
+			</tr>
+		</tbody></table>
+		
+
+	</td>
+	</tr>
+	<tr valign="top">
+		<td id="ctl00_LeftNavCell" class="LHNavBar">
+	
+
+<div class="FeatureBlockHeader">Announcements</div>
+<div class="FeatureBlockContent RHFeatureBar" style="margin: 0pt; padding: 0pt;">
+<table cellpadding="2">
+
+
+
+
+			
+
+<tbody><tr valign="middle"><td><img src="customgtkcontrol.aspx_files/Info_24.png" alt="Comp" height="24" width="24"></td>
+<td><a href="http://www.codeproject.com/script/Awards/Competition.aspx?cid=286">Mobile Developer Contest</a></td></tr>
+
+
+<tr valign="middle"><td><img src="customgtkcontrol.aspx_files/MonthlyComp.png" alt="Comp" align="middle" height="24" width="24"></td>
+<td><a id="ctl00_Announcements_CompLink" href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly Competition</a></td></tr>
+
+</tbody></table>
+</div>
+		
+	
+<div id="Th">
+
+<div class="FeatureBlockHeader" style="margin-top: 7px;">Want a new Job?</div>
+<div class="FeatureBlockContent RHFeatureBar">
+
+
+<ul class="InfoList">
+
+		<li>
+		<a id="RelatedJobs_RC_ctl00_Lnk" href="http://www.codeproject.com/script/Jobs/View.aspx?jid=356">Web Developer</a>
+		 at Mindex
+		 in United States
+		</li>		
+	
+		<li>
+		<a id="RelatedJobs_RC_ctl01_Lnk" href="http://www.codeproject.com/script/Jobs/View.aspx?jid=378">BizTalk Developer</a>
+		 at De Winter International Limited
+		 in New Zealand
+		</li>		
+	
+		<li>
+		<a id="RelatedJobs_RC_ctl02_Lnk" href="http://www.codeproject.com/script/Jobs/View.aspx?jid=383">Sharepoint Developer</a>
+		 at De Winter International Limited
+		 in New Zealand
+		</li>		
+	
+<li>
+	<a id="RelatedJobs_LJ" href="http://www.codeproject.com/script/Jobs/List.aspx">View Latest Jobs...</a>
+</li>
+</ul>
+
+</div>
+</div>
+
+	
+	
+	<div id="SectionMenu">
+<div class="MenuCat">Chapters</div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1" onclick="return ToggleMenu('Chapter1');">Desktop Development</a></div>
+<div class="MenuSectionBlock" id="Chapter1">
+<div class="MI" id="Section1"><a href="http://www.codeproject.com/KB/buttons/">Button Controls</a></div>
+<div class="MI" id="Section15"><a href="http://www.codeproject.com/KB/clipboard/">Clipboard</a></div>
+<div class="MI" id="Section2"><a href="http://www.codeproject.com/KB/combobox/">Combo &amp; List Boxes</a></div>
+<div class="MI" id="Section67"><a href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</a></div>
+<div class="MI" id="Section107"><a href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</a></div>
+<div class="MI" id="Section16"><a href="http://www.codeproject.com/KB/docview/">Document / View</a></div>
+<div class="MI" id="Section4"><a href="http://www.codeproject.com/KB/edit/">Edit Controls</a></div>
+<div class="MI" id="Section17"><a href="http://www.codeproject.com/KB/files/">Files and Folders</a></div>
+<div class="MI" id="Section3"><a href="http://www.codeproject.com/KB/grid/">Grid &amp; Data Controls</a></div>
+<div class="MI" id="Section5"><a href="http://www.codeproject.com/KB/list/">List Controls</a></div>
+<div class="MI" id="Section6"><a href="http://www.codeproject.com/KB/menus/">Menus</a></div>
+<div class="MI" id="Section14"><a href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</a></div>
+<div class="MI" id="Section18"><a href="http://www.codeproject.com/KB/printing/">Printing</a></div>
+<div class="MI" id="Section95"><a href="http://www.codeproject.com/KB/progress/">Progress Controls</a></div>
+<div class="MI" id="Section11"><a href="http://www.codeproject.com/KB/selection/">Selection Controls</a></div>
+<div class="MI" id="Section19"><a href="http://www.codeproject.com/KB/shell/">Shell and IE programming</a></div>
+<div class="MI" id="Section68"><a href="http://www.codeproject.com/KB/smart/">Smart Client</a></div>
+<div class="MI" id="Section8"><a href="http://www.codeproject.com/KB/splitter/">Splitter Windows</a></div>
+<div class="MIS" id="Section9"><a href="http://www.codeproject.com/KB/static/">Static &amp; Panel Controls</a></div>
+<div class="MI" id="Section10"><a href="http://www.codeproject.com/KB/statusbar/">Status Bar</a></div>
+<div class="MI" id="Section7"><a href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property Pages</a></div>
+<div class="MI" id="Section12"><a href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking windows</a></div>
+<div class="MI" id="Section13"><a href="http://www.codeproject.com/KB/tree/">Tree Controls</a></div>
+</div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2" onclick="return ToggleMenu('Chapter2');">Web Development</a></div>
+<div class="MenuSectionBlock" id="Chapter2" style="display: none;">
+<div class="MI" id="Section70"><a href="http://www.codeproject.com/KB/ajax/">Ajax and Atlas</a></div>
+<div class="MI" id="Section27"><a href="http://www.codeproject.com/KB/applications/">Applications &amp; Tools</a></div>
+<div class="MI" id="Section85"><a href="http://www.codeproject.com/KB/asp/">ASP</a></div>
+<div class="MI" id="Section89"><a href="http://www.codeproject.com/KB/aspnet/">ASP.NET</a></div>
+<div class="MI" id="Section28"><a href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</a></div>
+<div class="MI" id="Section38"><a href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</a></div>
+<div class="MI" id="Section29"><a href="http://www.codeproject.com/KB/web-cache/">Caching</a></div>
+<div class="MI" id="Section91"><a href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and Images</a></div>
+<div class="MI" id="Section25"><a href="http://www.codeproject.com/KB/scripting/">Client side scripting</a></div>
+<div class="MI" id="Section30"><a href="http://www.codeproject.com/KB/custom-controls/">Custom Controls</a></div>
+<div class="MI" id="Section23"><a href="http://www.codeproject.com/KB/HTML/">HTML / CSS</a></div>
+<div class="MI" id="Section24"><a href="http://www.codeproject.com/KB/ISAPI/">ISAPI</a></div>
+<div class="MI" id="Section33"><a href="http://www.codeproject.com/KB/server-management/">Site &amp; Server Management</a></div>
+<div class="MI" id="Section34"><a href="http://www.codeproject.com/KB/session/">Session State</a></div>
+<div class="MI" id="Section113"><a href="http://www.codeproject.com/KB/silverlight/">Silverlight</a></div>
+<div class="MI" id="Section36"><a href="http://www.codeproject.com/KB/trace/">Trace and Logs</a></div>
+<div class="MI" id="Section31"><a href="http://www.codeproject.com/KB/user-controls/">User Controls</a></div>
+<div class="MI" id="Section37"><a href="http://www.codeproject.com/KB/validation/">Validation</a></div>
+<div class="MI" id="Section35"><a href="http://www.codeproject.com/KB/viewstate/">View State</a></div>
+<div class="MI" id="Section26"><a href="http://www.codeproject.com/KB/WAP/">WAP / WML</a></div>
+<div class="MI" id="Section32"><a href="http://www.codeproject.com/KB/web-security/">Web Security</a></div>
+<div class="MI" id="Section20"><a href="http://www.codeproject.com/KB/webservices/">Web Services</a></div>
+</div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=9" onclick="return ToggleMenu('Chapter9');">Enterprise Systems</a></div>
+<div class="MenuSectionBlock" id="Chapter9" style="display: none;">
+<div class="MI" id="Section98"><a href="http://www.codeproject.com/KB/MCMS/">Content Management Server</a></div>
+<div class="MI" id="Section99"><a href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk Server</a></div>
+<div class="MI" id="Section102"><a href="http://www.codeproject.com/KB/exchange/">Microsoft Exchange</a></div>
+<div class="MI" id="Section90"><a href="http://www.codeproject.com/KB/office/">Office Development</a></div>
+<div class="MI" id="Section101"><a href="http://www.codeproject.com/KB/sharepoint/">SharePoint Server</a></div>
+</div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3" onclick="return ToggleMenu('Chapter3');">Multimedia</a></div>
+<div class="MenuSectionBlock" id="Chapter3" style="display: none;">
+<div class="MI" id="Section42"><a href="http://www.codeproject.com/KB/audio-video/">Audio and Video</a></div>
+<div class="MI" id="Section44"><a href="http://www.codeproject.com/KB/directx/">DirectX</a></div>
+<div class="MI" id="Section46"><a href="http://www.codeproject.com/KB/GDI/">GDI</a></div>
+<div class="MI" id="Section47"><a href="http://www.codeproject.com/KB/GDI-plus/">GDI+</a></div>
+<div class="MI" id="Section43"><a href="http://www.codeproject.com/KB/graphics/">General Graphics</a></div>
+<div class="MI" id="Section45"><a href="http://www.codeproject.com/KB/openGL/">OpenGL</a></div>
+</div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4" onclick="return ToggleMenu('Chapter4');">Database</a></div>
+<div class="MenuSectionBlock" id="Chapter4" style="display: none;">
+<div class="MI" id="Section66"><a href="http://www.codeproject.com/KB/database/">Database</a></div>
+<div class="MI" id="Section100"><a href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting Services</a></div>
+</div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=8" onclick="return ToggleMenu('Chapter8');">Platforms, Frameworks &amp; Libraries</a></div>
+<div class="MenuSectionBlock" id="Chapter8" style="display: none;">
+<div class="MI" id="Section83"><a href="http://www.codeproject.com/KB/atl/">ATL</a></div>
+<div class="MI" id="Section117"><a href="http://www.codeproject.com/KB/MFC/">MFC</a></div>
+<div class="MI" id="Section88"><a href="http://www.codeproject.com/KB/stl/">STL</a></div>
+<div class="MI" id="Section84"><a href="http://www.codeproject.com/KB/wtl/">WTL</a></div>
+<div class="MI" id="Section49"><a href="http://www.codeproject.com/KB/COM/">COM / COM+</a></div>
+<div class="MI" id="Section76"><a href="http://www.codeproject.com/KB/dotnet/">.NET Framework</a></div>
+<div class="MI" id="Section92"><a href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; OS</a></div>
+<div class="MI" id="Section108"><a href="http://www.codeproject.com/KB/vista/">Vista API</a></div>
+<div class="MI" id="Section110"><a href="http://www.codeproject.com/KB/vista-security/">Vista Security</a></div>
+<div class="MI" id="Section82"><a href="http://www.codeproject.com/KB/cross-platform/">Cross Platform</a></div>
+<div class="MI" id="Section69"><a href="http://www.codeproject.com/KB/game/">Game Development</a></div>
+<div class="MI" id="Section73"><a href="http://www.codeproject.com/KB/mobile/">Mobile Development</a></div>
+<div class="MI" id="Section106"><a href="http://www.codeproject.com/KB/WC/">Windows CardSpace</a></div>
+<div class="MI" id="Section103"><a href="http://www.codeproject.com/KB/WCF/">Windows Communication Foundation</a></div>
+<div class="MI" id="Section104"><a href="http://www.codeproject.com/KB/WPF/">Windows Presentation Foundation</a></div>
+<div class="MI" id="Section105"><a href="http://www.codeproject.com/KB/WF/">Windows Workflow Foundation</a></div>
+<div class="MI" id="Section119"><a href="http://www.codeproject.com/KB/library/">Libraries</a></div>
+<div class="MI" id="Section122"><a href="http://www.codeproject.com/KB/powershell/">Windows Powershell</a></div>
+<div class="MI" id="Section123"><a href="http://www.codeproject.com/KB/linq/">LINQ</a></div>
+</div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5" onclick="return ToggleMenu('Chapter5');">Languages</a></div>
+<div class="MenuSectionBlock" id="Chapter5" style="display: none;">
+<div class="MI" id="Section71"><a href="http://www.codeproject.com/KB/cpp/">C / C++ Language</a></div>
+<div class="MI" id="Section72"><a href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</a></div>
+<div class="MI" id="Section93"><a href="http://www.codeproject.com/KB/cs/">C#</a></div>
+<div class="MI" id="Section78"><a href="http://www.codeproject.com/KB/msil/">MSIL</a></div>
+<div class="MI" id="Section86"><a href="http://www.codeproject.com/KB/vbscript/">VBScript</a></div>
+<div class="MI" id="Section87"><a href="http://www.codeproject.com/KB/vb/">VB.NET</a></div>
+<div class="MI" id="Section115"><a href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</a></div>
+<div class="MI" id="Section77"><a href="http://www.codeproject.com/KB/net-languages/">Other .NET Languages</a></div>
+<div class="MI" id="Section21"><a href="http://www.codeproject.com/KB/XML/">XML</a></div>
+<div class="MI" id="Section96"><a href="http://www.codeproject.com/KB/java/">Java</a></div>
+</div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6" onclick="return ToggleMenu('Chapter6');">General Programming</a></div>
+<div class="MenuSectionBlock" id="Chapter6" style="display: none;">
+<div class="MI" id="Section57"><a href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; Recipes</a></div>
+<div class="MI" id="Section64"><a href="http://www.codeproject.com/KB/bugs/">Bugs &amp; Workarounds</a></div>
+<div class="MI" id="Section79"><a href="http://www.codeproject.com/KB/collections/">Collections</a></div>
+<div class="MI" id="Section56"><a href="http://www.codeproject.com/KB/security/">Cryptography &amp; Security</a></div>
+<div class="MI" id="Section50"><a href="http://www.codeproject.com/KB/datetime/">Date and Time</a></div>
+<div class="MI" id="Section52"><a href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</a></div>
+<div class="MI" id="Section80"><a href="http://www.codeproject.com/KB/exception/">Exception Handling</a></div>
+<div class="MI" id="Section81"><a href="http://www.codeproject.com/KB/locale/">Localisation</a></div>
+<div class="MI" id="Section53"><a href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</a></div>
+<div class="MI" id="Section54"><a href="http://www.codeproject.com/KB/tips/">Programming Tips</a></div>
+<div class="MI" id="Section55"><a href="http://www.codeproject.com/KB/string/">String handling</a></div>
+<div class="MI" id="Section22"><a href="http://www.codeproject.com/KB/IP/">Internet / Network</a></div>
+<div class="MI" id="Section58"><a href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; IPC</a></div>
+<div class="MI" id="Section59"><a href="http://www.codeproject.com/KB/winhelp/">WinHelp / HTMLHelp</a></div>
+</div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=10" onclick="return ToggleMenu('Chapter10');">Graphics / Design</a></div>
+<div class="MenuSectionBlock" id="Chapter10" style="display: none;">
+<div class="MI" id="Section40"><a href="http://www.codeproject.com/KB/expression/">Expression</a></div>
+<div class="MI" id="Section114"><a href="http://www.codeproject.com/KB/usability/">Usability</a></div>
+</div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=11" onclick="return ToggleMenu('Chapter11');">Development Lifecycle</a></div>
+<div class="MenuSectionBlock" id="Chapter11" style="display: none;">
+<div class="MI" id="Section51"><a href="http://www.codeproject.com/KB/debug/">Debug Tips</a></div>
+<div class="MI" id="Section39"><a href="http://www.codeproject.com/KB/architecture/">Design and Architecture</a></div>
+<div class="MI" id="Section112"><a href="http://www.codeproject.com/KB/install/">Installation</a></div>
+<div class="MI" id="Section41"><a href="http://www.codeproject.com/KB/work/">Work Issues</a></div>
+<div class="MI" id="Section128"><a href="http://www.codeproject.com/KB/testing/">Testing and QA</a></div>
+<div class="MI" id="Section126"><a href="http://www.codeproject.com/KB/codegen/">Code Generation</a></div>
+</div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=7" onclick="return ToggleMenu('Chapter7');">General Reading</a></div>
+<div class="MenuSectionBlock" id="Chapter7" style="display: none;">
+<div class="MI" id="Section60"><a href="http://www.codeproject.com/KB/books/">Book Chapters</a></div>
+<div class="MI" id="Section61"><a href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</a></div>
+<div class="MI" id="Section109"><a href="http://www.codeproject.com/KB/hardware-review/">Hardware Reviews</a></div>
+<div class="MI" id="Section63"><a href="http://www.codeproject.com/KB/interviews/">Interviews</a></div>
+<div class="MI" id="Section62"><a href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</a></div>
+<div class="MI" id="Section48"><a href="http://www.codeproject.com/KB/system/">Hardware &amp; System</a></div>
+</div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=12" onclick="return ToggleMenu('Chapter12');">Third Party Products</a></div>
+<div class="MenuSectionBlock" id="Chapter12" style="display: none;">
+<div class="MI" id="Section65"><a href="http://www.codeproject.com/KB/showcase/">Product Showcase</a></div>
+<div class="MI" id="Section124"><a href="http://www.codeproject.com/KB/solution-center/">Solution Center</a></div>
+</div>
+</div>
+<br>
+<div class="MenuCat">Services</div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/script/Jobs/List.aspx">Job Board</a></div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/Services/coffee.aspx">Code Project Coffee</a></div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/Services/TradePub.aspx">Free Magazines</a></div>
+<br><div class="MenuCat">Feature Zones</div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/kb/Showcase/">Product Showcase</a></div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/Zones/IBM">IBM DeveloperWorks</a></div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/Zones/WhitePapers">WhitePapers / Webcasts</a></div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/Zones/Acresso">InstallShield 2009</a></div>
+<div class="MenuChapter"><a href="http://www.codeproject.com/Zones/APress">Apress Bookstore</a></div>
+<br>
+
+	<div style="text-align: center; margin-bottom: 10px;">
+		<script type="text/javascript">document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6247%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAdm%2fServeImg.aspx%3fFile%3d%252fscript%252fAdm%252fimages%252fcp_daily_150x80.gif%26C%3dFalse%26adid%3d6247%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22150%22%20height%3d%2280%22%3e%3c%2fa%3e"));</script><a href="http://www.codeproject.com/Redir.aspx?adid=6247&amp;way=ban" target="_blank" rel="nofollow"><img src="customgtkcontrol.aspx_files/ServeImg.html" alt="" border="0" height="80" width="150"></a>
+	</div>
+	
+	<script type="text/javascript">document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d7542%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAdm%2fServeImg.aspx%3fFile%3d%252fscript%252fAdm%252fimages%252fIronspeed.2008.09.09.160%2bx%2b600%2bWeb%2b2.0%2bCode%2bGeneration.gif%26C%3dFalse%26adid%3d7542%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22160%22%20height%3d%22600%22%3e%3c%2fa%3e"));</script><a href="http://www.codeproject.com/Redir.aspx?adid=7542&amp;way=ban" target="_blank" rel="nofollow"><img src="customgtkcontrol.aspx_files/ServeImg_002.html" alt="" border="0" height="600" width="160"></a>						 
+</td>
+		<td class="ArticlePane" valign="top">
+
+	
+<table class="SearchHeaderBar" cellspacing="0" width="100%">
+<tbody><tr>
+<td style="white-space: nowrap; width: 60%;" align="right" valign="middle">
+<form method="get" action="/info/search.aspx" name="Search" style="margin: 0pt;">
+<b>Search &nbsp;</b>
+<input class="SmallText" name="artkw" style="width: 200px;">
+<select class="SmallText" style="font-weight: bold;" name="sbo">
+<option value="kw" selected="true">Articles</option>
+<option value="fm">Messages</option>
+<option value="s">Jobs</option>
+
+</select>
+<input class="SmallText" style="font-weight: bold;" value=" Go! " type="submit"> &nbsp;
+</form>
+</td>
+
+<td class="TinyText" style="white-space: nowrap;">
+<a href="http://www.codeproject.com/info/search.aspx">Advanced Search</a><br>
+<a href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</a>
+
+</td>
+</tr>
+</tbody></table>
+
+	<span id="ctl00_ResultMessage"></span>
+	
+	
+    
+	<div id="ctl00_ArtDiv">
+	<table border="0" cellpadding="0" cellspacing="0">	
+	<tbody><tr valign="top">
+		<td valign="top" width="100%">
+		    
+<table>
+
+</table>
+
+
+
+			
+<div class="SmallText">
+<img src="customgtkcontrol.aspx_files/print.gif" alt="print" style="vertical-align: middle;" height="16" width="16">
+<a id="ctl00_ArticleHeaderLinks_PrintLnk" href="http://www.codeproject.com/KB/static/customgtkcontrol.aspx?display=Print">Print</a> &nbsp;
+
+<img src="customgtkcontrol.aspx_files/report.gif" alt="Broken Article?" style="vertical-align: middle;" height="16" width="16">
+<a id="ctl00_ArticleHeaderLinks_BrokenLnk" href="http://www.codeproject.com/script/Articles/Report.aspx?aid=26161">Report Article</a> &nbsp;
+
+ &nbsp;
+ &nbsp;
+
+<img src="customgtkcontrol.aspx_files/discuss.gif" alt="Discuss" style="vertical-align: middle;" height="16" width="15">
+<a href="#_comments">Discuss</a> &nbsp;
+
+<img src="customgtkcontrol.aspx_files/mail.gif" alt="Recommend Article" style="vertical-align: middle;" height="16" width="16">&nbsp;<a id="ctl00_ArticleHeaderLinks_Recommend" href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=26161">Send&nbsp;to&nbsp;a&nbsp;friend</a>	
+</div>
+		</td>
+		<td style="text-align: right; white-space: nowrap; width: 100px;">
+		<table id="CurRat"><tbody><tr><td>            
+<table><tbody><tr><td id="ctl00_ArticleRating_VL" style="white-space: nowrap;" class="SmallText" align="right"> 
+<span id="ctl00_ArticleRating_VoteLabel">6 votes for this Article.</span></td>
+		
+<td><table border="1" cellpadding="0" cellspacing="0">
+			<tbody><tr>
+				<td bgcolor="White" height="7" width="20"><img src="customgtkcontrol.aspx_files/red.gif" align="center" border="0" height="7" width="20"></td>
+				<td bgcolor="White" height="7" width="20"><img src="customgtkcontrol.aspx_files/red.gif" align="center" border="0" height="7" width="20"></td>
+				<td bgcolor="White" height="7" width="20"><img src="customgtkcontrol.aspx_files/red.gif" align="center" border="0" height="7" width="20"></td>
+				<td bgcolor="White" height="7" width="20"><img src="customgtkcontrol.aspx_files/red.gif" align="center" border="0" height="7" width="20"></td>
+				<td bgcolor="White" height="7" nowrap="nowrap" width="20"><img src="customgtkcontrol.aspx_files/red.gif" align="center" border="0" height="7" width="4"></td>
+			</tr>
+		</tbody></table>
+		<span id="ctl00_ArticleRating_Votes" class="SmallText"></span></td></tr>
+<tr id="ctl00_ArticleRating_PopularityRow">
+			<td colspan="2" class="SmallText" align="right">
+<a id="ctl00_ArticleRating_PopularityLnk" title="Calculated as rating x Log10(# votes)" href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 3.25</a>
+<span id="ctl00_ArticleRating_PopularityLbl"></span><span id="ratingVal">Rating: <b>4.18</b> out of 5</span></td>
+		</tr>
+		</tbody></table>
+
+
+
+</td>
+		<td>            
+<div>
+<table class="HistTable" title="Voting Distribution. Recent data only"><tbody><tr><td><img src="customgtkcontrol.aspx_files/pollcol.gif" alt="1 vote, 16.7%" title="1 vote, 16.7%" border="0" height="6" width="10"><br>1</td>
+<td><img src="customgtkcontrol.aspx_files/t.html" alt="0 votes, 0.0%" title="0 votes, 0.0%" border="0" height="1" width="10"><br>2</td>
+<td><img src="customgtkcontrol.aspx_files/t.html" alt="0 votes, 0.0%" title="0 votes, 0.0%" border="0" height="1" width="10"><br>3</td>
+<td><img src="customgtkcontrol.aspx_files/pollcol.gif" alt="2 votes, 33.3%" title="2 votes, 33.3%" border="0" height="13" width="10"><br>4</td>
+<td><img src="customgtkcontrol.aspx_files/pollcol.gif" alt="3 votes, 50.0%" title="3 votes, 50.0%" border="0" height="20" width="10"><br>5</td>
+</tr></tbody></table>
+</div>
+
+
+
+</td></tr></tbody></table>
+		</td>
+	</tr>
+	</tbody></table>
+	
+	
+	
+	
+
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div id="contentdiv">
+	
+	<!-- Main Page Contents Start -->
+	
+
+<!-- Article Starts -->
+
+
+<ul class="download">
+<li><a href="http://www.codeproject.com/KB/static/customgtkcontrol/customgtkcontrolExe.zip">Download EXE - 6.95 KB</a></li>
+
+<li><a href="http://www.codeproject.com/KB/static/customgtkcontrol/customgtkcontrolSources.zip">Download sources - 11.6 KB</a></li>
+</ul>
+
+<p><img src="customgtkcontrol.aspx_files/customgtkcontrol.png" height="267" width="394"></p>
+
+<h2>Introduction</h2>
+
+<p>Custom controls for Mono and GTK are usually done using basic
+Widgets. Sometimes, a custom rendering is preferred to achieve more
+advanced GUIs. This article presents a basic implementation of movable
+objects within a panel, with a popup menu to modify each object and
+their appearance.</p>
+
+<h2>Background</h2>
+
+<p>I recently made the switch to Ubuntu, and I am quite delighted with
+it. I develop mainly on .NET, and my dependence on some Windows tools
+was the sticky point that made me wait this long. This is now not
+really an issue, thanks to the great work of the Mono and MonoDevelop
+teams, and the related libraries like GTK#, Cairo, and Pango.</p>
+
+<p>Mono brings the .NET platform to Linux, and MonoDevelop offers a
+good alternative to Visual Studio, making the development of GUI
+applications on the GTK desktop almost painless.</p>
+
+<p>I wrote a cooperation tool that I use on a daily basis, and my first
+goal after the switch was to port it over with Mono and GTK#. After a
+few adjustments caused by the fundamental differences between Windows
+Forms and GTK#, I have to admit that the port of the application was a
+lot easier than I initially thought; I replaced the UI controls by
+widgets, set the various forms to use the GTK# layout, and that is
+pretty much it. The rest of the non-UI code worked as expected, with an
+overall good performance.</p>
+
+<p>An area that gave me the most difficulty was the usage of custom
+controls with a behavior that is different from the base GTK
+components. This is the focus of this article.</p>
+
+<h2>Goals</h2>
+
+<ul>
+<li>Visual representation of elements as a graph</li>
+
+<li>Each element has a title and some properties represented on the rendering</li>
+
+<li>Each element can be freely moved in the defined panel</li>
+
+<li>Each element has its own popup menu to change its properties</li>
+</ul>
+
+<h2>Solution</h2>
+
+<p>After spending some time with the GTK documentation, the <code>Fixed</code> and <code>DrawingArea</code> widgets seem to be the obvious choice. The <code>Fixed</code>
+panel allows the placement of controls in absolute position. Although
+it is usually not recommended for most of the forms, it does pretty
+well in this case.</p>
+
+<p><strong><code>MVPanel</code></strong> is the inherited <code>Fixed</code>
+container that contains the movable object. It can be dropped in any
+form as a regular GTK widget. It contains the following methods:</p>
+
+<ul class="method">
+<li><code lang="cs">AddMovingObject(<span class="code-keyword">string</span> name,<span class="code-keyword">string</span> caption, <span class="code-keyword">int</span> x, <span class="code-keyword">int</span> y)</code> to add a new movable object.</li>
+
+<li><code>RefreshChildren()</code> to force the controls to redraw.</li>
+</ul>
+
+<p><strong><code>MVObject</code></strong> is a basic implementation of the custom control that will be movable within the <code>MVPanel</code>. It inherits from <code>DrawingArea</code>.</p>
+
+<p>It contains the following methods/properties:</p>
+
+<ul class="method">
+<li><code>ShowMenu()</code> to present to the user the options on that particular control.</li>
+
+<li><code>Edit()</code> to set the mode of the control in edit mode.</li>
+
+<li><code>Redraw()</code> to force the control to redraw.</li>
+</ul>
+
+<ul class="property">
+<li><code>Caption</code> to get a basic property of the control.</li>
+</ul>
+
+<h2>Rendering a custom control</h2>
+
+<p>The rendering of a <code>DrawingArea</code> widget has to be fully
+specified. That is the drawback of being custom, but that is sometimes
+what is needed. The libraries Cairo, for graphics, and Pango, for text,
+seems to be recommended to render a consistent and contemporary look.
+Pango is used in this sample but not Cairo, since the rendering is
+quite simple.</p>
+
+<p>The overridden method <code>OnExposeEvent</code> is where all the
+rendering is done. Here, the area is painted with dark gray and light
+gray, with some black lines to separate the two. Some text is also
+added in each colored area.</p>
+
+<div class="SmallText" id="premain0" style="width: 100%; cursor: pointer;"><img preid="0" src="customgtkcontrol.aspx_files/minus.gif" id="preimg0" height="9" width="9"><span preid="0" style="margin-bottom: 0pt;" id="precollapse0"> Collapse</span></div><pre style="margin-top: 0pt;" id="pre0" lang="cs"><span class="code-keyword">using</span> System;
+<span class="code-keyword">using</span> Gtk;
+
+<span class="code-keyword">namespace</span> GtkControl.Control
+{
+    
+    <span class="code-keyword">public</span> <span class="code-keyword">class</span> MVObject : Gtk.DrawingArea 
+    {
+        
+        <span class="code-keyword">public</span> MVObject(<span class="code-keyword">string</span> pName, <span class="code-keyword">string</span> cap)
+        {
+                  ...
+        }
+                
+        <span class="code-keyword">public</span> <span class="code-keyword">void</span> Redraw()
+        {
+            <span class="code-keyword">this</span>.QueueDraw();
+        }
+
+               <span class="code-keyword">private</span> Pango.Layout GetLayout(<span class="code-keyword">string</span> text)
+        {
+            Pango.Layout layout = <span class="code-keyword">new</span> Pango.Layout(<span class="code-keyword">this</span>.PangoContext);
+            layout.FontDescription = Pango.FontDescription.FromString(<span class="code-string">&amp;quot;</span><span class="code-string">monospace 8&amp;quot;</span>);
+            layout.SetMarkup(<span class="code-string">&amp;quot;</span><span class="code-string">&lt;span color=\&amp;quot;black\&amp;quot;&gt;&amp;quot;</span> + text + <span class="code-string">&amp;quot;</span><span class="code-string">&lt;/span&gt;&amp;quot;</span>);
+            <span class="code-keyword">return</span> layout;
+        }
+        
+        <span class="code-keyword">protected</span> <span class="code-keyword">override</span> <span class="code-keyword">bool</span> OnExposeEvent (Gdk.EventExpose args)
+        {    
+            Gdk.Window win = args.Window;
+            Gdk.Rectangle area = args.Area;
+                
+            win.DrawRectangle(Style.DarkGC(StateType.Normal), <span class="code-keyword">true</span>, area);
+            win.DrawRectangle(Style.MidGC(StateType.Normal),<span class="code-keyword">true</span>,<span class="code-digit">0</span>,<span class="code-digit">15</span>,<span class="code-digit">1000</span>,<span class="code-digit">1000</span>);
+            win.DrawRectangle(Style.BlackGC,<span class="code-keyword">false</span>,area);
+            win.DrawLine(Style.BlackGC,<span class="code-digit">0</span>,<span class="code-digit">15</span>,<span class="code-digit">1000</span>,<span class="code-digit">15</span>);            
+            win.DrawLayout(Style.BlackGC,<span class="code-digit">2</span>,<span class="code-digit">2</span>,titleLayout);
+
+            <span class="code-keyword">if</span> (!string.IsNullOrEmpty(body))
+            {
+                win.DrawLayout(Style.BlackGC,<span class="code-digit">2</span>,<span class="code-digit">17</span>,GetLayout(body));
+            }
+            <span class="code-keyword">return</span> <span class="code-keyword">true</span>;
+        } 
+    }
+}</pre>
+
+<p>The <code>QueueDraw</code> method is a call to GTK to indicate that the control has to be redrawn.</p>
+
+<h2>Moving a control</h2>
+
+<p>A control cannot be moved, by default. But, the <code>Fixed</code>
+widget allows to put or move a control at a specified position. Also,
+the control needs to respond to the click of the mouse, the drag, and
+the release of the button.</p>
+
+<div class="SmallText" id="premain1" style="width: 100%; cursor: pointer;"><img preid="1" src="customgtkcontrol.aspx_files/minus.gif" id="preimg1" height="9" width="9"><span preid="1" style="margin-bottom: 0pt;" id="precollapse1"> Collapse</span></div><pre style="margin-top: 0pt;" id="pre1" lang="cs"><span class="code-keyword">using</span> System;
+<span class="code-keyword">using</span> Gtk;
+
+<span class="code-keyword">namespace</span> GtkControl.Control
+{
+    <span class="code-keyword">public</span> <span class="code-keyword">partial</span> <span class="code-keyword">class</span> MVPanel : Gtk.Bin
+    {
+               <span class="code-keyword">private</span> Widget currCtrl = <span class="code-keyword">null</span>;
+        <span class="code-keyword">private</span> Widget currClone = <span class="code-keyword">null</span>;
+        <span class="code-keyword">private</span> <span class="code-keyword">int</span> origX = <span class="code-digit">0</span>;
+        <span class="code-keyword">private</span> <span class="code-keyword">int</span> origY = <span class="code-digit">0</span>;
+        <span class="code-keyword">private</span> <span class="code-keyword">int</span> pointX = <span class="code-digit">0</span>;
+        <span class="code-keyword">private</span> <span class="code-keyword">int</span> pointY = <span class="code-digit">0</span>;
+
+        ...
+        
+        <span class="code-comment">//</span><span class="code-comment">Mouse click on the controls of the panel  </span>
+        <span class="code-keyword">protected</span> <span class="code-keyword">void</span> OnButtonPressed(<span class="code-keyword">object</span> sender, ButtonPressEventArgs a)
+        {        
+            <span class="code-comment">//</span><span class="code-comment">Save the origin of the move in origX and origY</span>
+            currCtrl = sender <span class="code-keyword">as</span> Widget;
+            currCtrl.TranslateCoordinates(<span class="code-keyword">this</span>.fixed1,<span class="code-digit">0</span>,<span class="code-digit">0</span>,<span class="code-keyword">out</span> origX, <span class="code-keyword">out</span> origY);
+                      <span class="code-comment">//</span><span class="code-comment">Save the pointer position relative the origin of the move</span>
+            fixed1.GetPointer(<span class="code-keyword">out</span> pointX,<span class="code-keyword">out</span> pointY);
+        }
+
+        <span class="code-keyword">protected</span> <span class="code-keyword">void</span> OnButtonReleased(<span class="code-keyword">object</span> sender, ButtonReleaseEventArgs a)
+        {
+            <span class="code-comment">//</span><span class="code-comment">Final destination of the control</span>
+            MoveControl(currCtrl, a.Event.X,a.Event.Y,<span class="code-keyword">false</span>);
+            currCtrl = <span class="code-keyword">null</span>;
+            <span class="code-keyword">if</span> (currClone!=null)
+            {
+                <span class="code-keyword">this</span>.fixed1.Remove(currClone);
+                currClone.Destroy();
+                currClone = <span class="code-keyword">null</span>;
+            }
+        }
+
+        <span class="code-comment">//</span><span class="code-comment">Called whenever a control is moved</span>
+        <span class="code-keyword">protected</span> <span class="code-keyword">virtual</span> <span class="code-keyword">void</span> OnFixed1MotionNotifyEvent (<span class="code-keyword">object</span> o, 
+                               Gtk.MotionNotifyEventArgs args)
+        {
+            <span class="code-comment">//</span><span class="code-comment">Rendering of a clone at the desired location</span>
+            <span class="code-keyword">if</span> (currCtrl!=null)
+            {
+                MoveClone(<span class="code-keyword">ref</span> currClone, args.Event.X,args.Event.Y);
+            }
+        }
+    }    
+}</pre>
+
+<p><strong><code>TranslateCoordinates</code></strong> is a GTK method, and gives back the relative position of a control in a container, here <code>fixed1</code>.</p>
+
+<p><strong><code>GetPointer</code></strong> is also a GTK method, and gives back the position of the cursor relative to a control.</p>
+
+<p>The method <strong><code>MoveControl</code></strong> calls the <code>fixed1.Move</code>
+method and makes sure that the control stays within the panel. It also
+takes care of redrawing the control after it has been moved.</p>
+
+<p>The method <strong><code>MoveClone</code></strong> calls <code>MoveControl</code>
+on a clone of the selected widget. This ensures that the user sees the
+control in both places (origin and destination). The clone is generated
+when the button is pressed, and follows the mouse movement until the
+button is released. The event <code>MotionNotifyEvent</code> can be dropped if the intermediate state is not desired.</p>
+
+<p>A <code>DrawingArea</code> object does rendering, but doesn't respond to events. That is why the <code>MVObject</code> is embedded in an <code>EventBox</code> where all the mouse events are controlled. This is done in the <strong><code>GetMovingBox</code></strong> method:</p>
+
+<div class="SmallText" id="premain2" style="width: 100%; cursor: pointer;"><img preid="2" src="customgtkcontrol.aspx_files/minus.gif" id="preimg2" height="9" width="9"><span preid="2" style="margin-bottom: 0pt;" id="precollapse2"> Collapse</span></div><pre style="margin-top: 0pt;" id="pre2" lang="cs"><span class="code-comment">//</span><span class="code-comment">Create the event box for the custom control</span>
+<span class="code-keyword">private</span> EventBox GetMovingBox(<span class="code-keyword">string</span> name, <span class="code-keyword">string</span> caption)
+{ 
+    MVObject ctrl = <span class="code-keyword">new</span> MVObject(name,caption);
+    EventBox rev = <span class="code-keyword">new</span> EventBox();
+    rev.Name = name;
+    rev.Add(ctrl);
+    Console.WriteLine(<span class="code-string">&amp;quot;</span><span class="code-string">Creating new moving object&amp;quot;</span>+rev.Name);
+    <span class="code-keyword">return</span> rev;
+}</pre>
+
+<h2>Using the MVPanel</h2>
+
+<p>The public method <strong><code lang="cs">AddMovingObject(<span class="code-keyword">string</span> name,<span class="code-keyword">string</span> caption, <span class="code-keyword">int</span> x, <span class="code-keyword">int</span> y)</code></strong> is how an object is added to the panel, with the caption being the title, and the name the identification of the object.</p>
+
+<div class="SmallText" id="premain3" style="width: 100%; cursor: pointer;"><img preid="3" src="customgtkcontrol.aspx_files/minus.gif" id="preimg3" height="9" width="9"><span preid="3" style="margin-bottom: 0pt;" id="precollapse3"> Collapse</span></div><pre style="margin-top: 0pt;" id="pre3" lang="cs"><span class="code-comment">//</span><span class="code-comment">Add a movable control to the panel</span>
+<span class="code-keyword">public</span> <span class="code-keyword">void</span> AddMovingObject(<span class="code-keyword">string</span> name,<span class="code-keyword">string</span> caption, <span class="code-keyword">int</span> x, <span class="code-keyword">int</span> y)
+{
+    <span class="code-comment">//</span><span class="code-comment">Prevent the object to be displayed outside the panel</span>
+    <span class="code-keyword">if</span> (x&lt;0)
+    {
+        x = <span class="code-digit">0</span>;
+    }
+    <span class="code-keyword">if</span> (y&lt;0)
+    {
+        y = <span class="code-digit">0</span>;
+    }
+    <span class="code-comment">//</span><span class="code-comment">Create the box where the custom object is rendered</span>
+    EventBox ev = GetMovingBox(name,caption);
+    <span class="code-comment">//</span><span class="code-comment">Add the events to control the movement of the box</span>
+    ev.ButtonPressEvent+=new ButtonPressEventHandler(OnButtonPressed);
+    ev.ButtonReleaseEvent+=new ButtonReleaseEventHandler(OnButtonReleased);
+    <span class="code-comment">//</span><span class="code-comment">Add the control to the panel</span>
+    <span class="code-keyword">this</span>.fixed1.Put(ev,x,y);
+    <span class="code-keyword">this</span>.ShowAll();
+}</pre>
+
+<p>For the above screenshot, that translates to:</p>
+
+<div class="SmallText" id="premain4" style="width: 100%; cursor: pointer;"><img preid="4" src="customgtkcontrol.aspx_files/minus.gif" id="preimg4" height="9" width="9"><span preid="4" style="margin-bottom: 0pt;" id="precollapse4"> Collapse</span></div><pre style="margin-top: 0pt;" id="pre4" lang="cs"><span class="code-keyword">this</span>.mvpanel1.AddMovingObject(<span class="code-string">&amp;quot;</span><span class="code-string">mv1&amp;quot;</span>,<span class="code-string">&amp;quot;</span><span class="code-string">Moving Object 1&amp;quot;</span>,<span class="code-digit">10</span>,<span class="code-digit">10</span>);
+<span class="code-keyword">this</span>.mvpanel1.AddMovingObject(<span class="code-string">&amp;quot;</span><span class="code-string">mv2&amp;quot;</span>,<span class="code-string">&amp;quot;</span><span class="code-string">Moving Object 2&amp;quot;</span>,<span class="code-digit">10</span>,<span class="code-digit">55</span>);
+<span class="code-keyword">this</span>.mvpanel1.AddMovingObject(<span class="code-string">&amp;quot;</span><span class="code-string">mv3&amp;quot;</span>,<span class="code-string">&amp;quot;</span><span class="code-string">Mono&amp;quot;</span>,<span class="code-digit">10</span>,<span class="code-digit">100</span>);
+<span class="code-keyword">this</span>.mvpanel1.AddMovingObject(<span class="code-string">&amp;quot;</span><span class="code-string">mv4&amp;quot;</span>,<span class="code-string">&amp;quot;</span><span class="code-string">Gtk#&amp;quot;</span>,<span class="code-digit">10</span>,<span class="code-digit">145</span>);
+<span class="code-keyword">this</span>.mvpanel1.AddMovingObject(<span class="code-string">&amp;quot;</span><span class="code-string">mv5&amp;quot;</span>,<span class="code-string">&amp;quot;</span><span class="code-string">MonoDevelop&amp;quot;</span>,<span class="code-digit">10</span>,<span class="code-digit">190</span>);
+<span class="code-keyword">this</span>.mvpanel1.AddMovingObject(<span class="code-string">&amp;quot;</span><span class="code-string">mv6&amp;quot;</span>,<span class="code-string">&amp;quot;</span><span class="code-string">Pango&amp;quot;</span>,<span class="code-digit">10</span>,<span class="code-digit">235</span>);
+<span class="code-keyword">this</span>.mvpanel1.AddMovingObject(<span class="code-string">&amp;quot;</span><span class="code-string">mv7&amp;quot;</span>,<span class="code-string">&amp;quot;</span><span class="code-string">Test&amp;quot;</span>,<span class="code-digit">10</span>,<span class="code-digit">280</span>);</pre>
+
+<h2>Showing a context menu on the control</h2>
+
+<p>The final piece of the sample, the context menu for the control.</p>
+
+<p>The <code>MVObject</code> implements a public method <strong><code>ShowMenu</code></strong> that simply calls the <strong><code>Popup</code></strong> method of a predefined <code>Gtk.Menu</code> on the control.</p>
+
+<div class="SmallText" id="premain5" style="width: 100%; cursor: pointer;"><img preid="5" src="customgtkcontrol.aspx_files/minus.gif" id="preimg5" height="9" width="9"><span preid="5" style="margin-bottom: 0pt;" id="precollapse5"> Collapse</span></div><pre style="margin-top: 0pt;" id="pre5" lang="cs">Gtk.Menu popup = <span class="code-keyword">new</span> Gtk.Menu();
+Gtk.MenuItem text1 = <span class="code-keyword">new</span> MenuItem(<span class="code-string">&amp;quot;</span><span class="code-string">Test1&amp;quot;</span>);
+text1.Activated+=new EventHandler(Menu1Clicked);
+Gtk.MenuItem text2 = <span class="code-keyword">new</span> MenuItem(<span class="code-string">&amp;quot;</span><span class="code-string">Test2&amp;quot;</span>);
+text2.Activated+=new EventHandler(Menu2Clicked);</pre>
+
+<p><code>Menu1Clicked</code> changes the <code>body</code> property on the control and forces a redrawing. This alters its appearance through the <code>OnExposedEvent</code> method.</p>
+
+<div class="SmallText" id="premain6" style="width: 100%; cursor: pointer;"><img preid="6" src="customgtkcontrol.aspx_files/minus.gif" id="preimg6" height="9" width="9"><span preid="6" style="margin-bottom: 0pt;" id="precollapse6"> Collapse</span></div><pre style="margin-top: 0pt;" id="pre6" lang="cs"><span class="code-keyword">protected</span> <span class="code-keyword">void</span> Menu1Clicked(<span class="code-keyword">object</span> sender, EventArgs args)
+{
+    body = <span class="code-string">&amp;quot;</span><span class="code-string">Test1&amp;quot;</span>;
+    <span class="code-keyword">this</span>.QueueDraw();
+}</pre>
+
+<p>The call to the menu is defined by the mouse right click in <strong><code>MVPanel.OnButtonPress</code></strong>:</p>
+
+<div class="SmallText" id="premain7" style="width: 100%; cursor: pointer;"><img preid="7" src="customgtkcontrol.aspx_files/minus.gif" id="preimg7" height="9" width="9"><span preid="7" style="margin-bottom: 0pt;" id="precollapse7"> Collapse</span></div><pre style="margin-top: 0pt;" id="pre7" lang="cs"><span class="code-comment">//</span><span class="code-comment">Mouse click on the controls of the panel  </span>
+<span class="code-keyword">protected</span> <span class="code-keyword">void</span> OnButtonPressed(<span class="code-keyword">object</span> sender, ButtonPressEventArgs a)
+{        
+    <span class="code-comment">//</span><span class="code-comment">Right click</span>
+    <span class="code-keyword">if</span> (a.Event.Button==3)
+    {
+        <span class="code-keyword">if</span> (sender <span class="code-keyword">is</span> EventBox)
+        {
+            ((sender <span class="code-keyword">as</span> EventBox).Child <span class="code-keyword">as</span> MVObject).ShowMenu();
+        }    
+    }
+    <span class="code-comment">//</span><span class="code-comment">Left click</span>
+    <span class="code-keyword">else</span> <span class="code-keyword">if</span> (a.Event.Button==1)
+    {
+        <span class="code-comment">//</span><span class="code-comment">Double-click</span>
+        <span class="code-keyword">if</span> (a.Event.Type==Gdk.EventType.TwoButtonPress)
+        {
+            <span class="code-keyword">if</span> (sender <span class="code-keyword">is</span> EventBox)
+            {
+                <span class="code-comment">//</span><span class="code-comment">Calling the edit method of the control</span>
+                ((sender <span class="code-keyword">as</span> EventBox).Child <span class="code-keyword">as</span> MVObject).Edit();
+            }    
+        }
+        <span class="code-keyword">else</span>
+        {
+            <span class="code-comment">//</span><span class="code-comment">Setup the origin of the move</span>
+            currCtrl = sender <span class="code-keyword">as</span> Widget;
+            currCtrl.TranslateCoordinates(<span class="code-keyword">this</span>.fixed1,<span class="code-digit">0</span>,<span class="code-digit">0</span>,<span class="code-keyword">out</span> origX, <span class="code-keyword">out</span> origY);
+            fixed1.GetPointer(<span class="code-keyword">out</span> pointX,<span class="code-keyword">out</span> pointY);
+        }
+    }
+}</pre>
+
+<h2>Points of interest</h2>
+
+<p>This implementation was easier than I thought it would be. Of
+course, this is not that useful in its current state, but gave me a
+good idea on the possibility of using GTK and Mono outside the regular
+widgets. I could well extend it as a small graphing framework for
+myself, but I am sure that it already exists as separate projects with
+a more robust design. However, this will definitely suit more than my
+needs, with a few additional adjustments.</p>
+
+<p>I wanted to share this code as I didn't find a lot of existing
+documentation on custom rendering implementations, with complete code,
+on Mono.</p>
+
+<p>There is, however, a lot of documentation on the base libraries, that I use as references:</p>
+
+<ul>
+<li><a title="Gtk#" href="http://www.mono-project.com/GtkSharp" target="_blank">GTK#</a></li>
+
+<li><a title="Pango" href="http://www.mono-project.com/Pango:Beginners" target="_blank">Pango</a></li>
+
+<li><a title="Cairo" href="http://www.mono-project.com/Mono.Cairo" target="_blank">Cairo</a></li>
+
+<li><a title="Mono" href="http://www.mono-project.com/" target="_blank">Mono</a></li>
+
+<li><a title="MonoDevelop" href="http://www.monodevelop.com/Main_Page" target="_blank">MonoDevelop</a></li>
+</ul>
+
+
+
+<!-- Article Ends -->
+
+
+	<!-- Main Page Contents End -->
+	
+	</div>
+	
+	
+	<form name="aspnetForm" method="post" action="customgtkcontrol.aspx" id="aspnetForm" style="margin: 0pt; padding: 0pt;">
+		<div>
+		<input name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTEwMDUyNjYzMjhkZDso1NRUQaB5aBva/tNTIon+plCb" type="hidden">
+		</div>
+		
+
+	
+	<h2>License</h2>
+	<div id="ctl00_LicenseTerms"><p>This article, along with any associated source code and files, is licensed under <a href="http://www.opensource.org/licenses/gpl-license.php">The GNU General Public License (GPL)</a></p></div>
+	
+	<h2>About the Author</h2>
+	
+			
+            
+<table border="0" cellpadding="0" cellspacing="5" width="100%">
+<tbody><tr valign="top">
+<td id="ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable" style="width: 155px;" valign="top">
+	<b><a id="ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink" href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1090000">Olivier Lecointre</a></b><br><br>
+	<center></center><br>
+	<span id="ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType" class="SmallText"></span>
+		
+</td>
+		
+<td>
+	<br>	
+
+	<table>
+	<tbody><tr id="ctl00_AboutAuthorRptr_ctl00_AboutAuthor_jobTitleRow">
+			<td class="SmallText" nowrap="nowrap">Occupation: </td>
+			<td width="100%"><span id="ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberJobTitle" class="SmallText">Software Developer</span></td>
+		</tr>
+		
+
+	
+
+	<tr id="ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow">
+			<td class="SmallText">Location: </td>
+			<td width="100%"><span id="ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation" class="SmallText"><img src="customgtkcontrol.aspx_files/US.gif" alt="United States" height="11" width="16"> United States</span></td>
+		</tr>
+		
+	</tbody></table>
+	
+</td>
+</tr>
+</tbody></table>
+
+			<br>
+		
+	
+	<table border="0" cellpadding="0" cellspacing="0" width="100%">	
+	<tbody><tr valign="top">			
+		<td style="width: 100%;">
+			<h2>Other popular Static &amp; Panel Controls articles:</h2><ul><li><a href="http://www.codeproject.com/KB/static/digistring.aspx">Static LED control - CDigiStatic 1.3</a><div class="SmallText">A control to display text or numbers with a 14 or 7 segment display.</div></li><li><a href="http://www.codeproject.com/KB/static/digidisplay.aspx">Digital Display CStatic control</a><div class="SmallText">An article on the Digital Display Control</div></li><li><a href="http://www.codeproject.com/KB/static/clabel.aspx">Extended Use of CStatic Class - CLabel 1.6</a><div class="SmallText">A fully stocked owner drawn CStatic class</div></li><li><a href="http://www.codeproject.com/KB/static/CBitmapSlider.aspx">CBitmapSlider</a><div class="SmallText">A CStatic derived class that has slider functions. It is skinned using bitmaps.</div></li><li><a href="http://www.codeproject.com/KB/static/coloredit_colorstatic.aspx">Using colors in CEdit and CStatic</a><div class="SmallText">Classes derived from CEdit and CStatic. It makes changing colors for text and backgrounds easy.</div></li></ul>
+		</td>
+		<td>
+			<script type="text/javascript">document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d8172%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAdm%2fServeImg.aspx%3fFile%3d%252fscript%252fAdm%252fimages%252f20082-300x250.png%26C%3dFalse%26adid%3d8172%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22300%22%20height%3d%22250%22%3e%3c%2fa%3e"));</script><a href="http://www.codeproject.com/Redir.aspx?adid=8172&amp;way=ban" target="_blank" rel="nofollow"><img src="customgtkcontrol.aspx_files/ServeImg_004.html" alt="" border="0" height="250" width="300"></a>
+		</td>
+	</tr>
+	</tbody></table>
+
+	<div id="ctl00_AddTo_AddTo" style="margin: 10px;">
+<script language="JavaScript" type="text/javascript">
+var socialLinks = new social();
+socialLinks.addtoMethod=1;
+socialLinks.DrawLinks("socialLinks", document.location.href, escape(document.title), 100, 0, "SmallText Bold", "AddTo");
+</script><span class="SmallText Bold">Add this article to: </span> <a class="AddTo" title="Add this page to Digg" onclick="return socialLinks.addto(0);" href="#"><img src="customgtkcontrol.aspx_files/AddTo_Digg.png" align="absmiddle" border="0" height="16" width="16"></a>  <a class="AddTo" title="Add this page to Del.icio.us" onclick="return socialLinks.addto(1);" href="#"><img src="customgtkcontrol.aspx_files/AddTo_Delicious.png" align="absmiddle" border="0" height="16" width="16"></a>  <a class="AddTo" title="Add this page to Google" onclick="return socialLinks.addto(2);" href="#"><img src="customgtkcontrol.aspx_files/AddTo_Google.png" align="absmiddle" border="0" height="16" width="16"></a>  <a class="AddTo" title="Add this page to Windows Live" onclick="return socialLinks.addto(3);" href="#"><img src="customgtkcontrol.aspx_files/AddTo_Live.png" align="absmiddle" border="0" height="16" width="16"></a>  <a class="AddTo" title="Add this page to Yahoo! MyWeb" onclick="return socialLinks.addto(4);" href="#"><img src="customgtkcontrol.aspx_files/AddTo_Yahoo.png" align="absmiddle" border="0" height="16" width="16"></a>  <a class="AddTo" title="Add this page to Technorati" onclick="return socialLinks.addto(5);" href="#"><img src="customgtkcontrol.aspx_files/AddTo_Technorati.png" align="absmiddle" border="0" height="16" width="16"></a>  <a class="AddTo" title="Add this page to Blink" onclick="return socialLinks.addto(6);" href="#"><img src="customgtkcontrol.aspx_files/AddTo_Blink.png" align="absmiddle" border="0" height="16" width="16"></a>  <a class="AddTo" title="Add this page to Facebook" onclick="return socialLinks.addto(7);" href="#"><img src="customgtkcontrol.aspx_files/AddTo_Facebook.png" align="absmiddle" border="0" height="16" width="16"></a>  <a class="AddTo" title="Add this page to Furl" onclick="return socialLinks.addto(8);" href="#"><img src="customgtkcontrol.aspx_files/AddTo_Furl.png" align="absmiddle" border="0" height="16" width="16"></a>  <a class="AddTo" title="Add this page to Simpy" onclick="return socialLinks.addto(9);" href="#"><img src="customgtkcontrol.aspx_files/AddTo_Simpy.png" align="absmiddle" border="0" height="16" width="16"></a>  <a class="AddTo" title="Add this page to Reddit" onclick="return socialLinks.addto(10);" href="#"><img src="customgtkcontrol.aspx_files/AddTo_Reddit.png" align="absmiddle" border="0" height="16" width="16"></a>  <a class="AddTo" title="Add this page to Newsvine" onclick="return socialLinks.addto(11);" href="#"><img src="customgtkcontrol.aspx_files/AddTo_Newsvine.png" align="absmiddle" border="0" height="16" width="16"></a>  <a class="AddTo" title="Add this page to Stumbleupon" onclick="return socialLinks.addto(12);" href="#"><img src="customgtkcontrol.aspx_files/AddTo_stumbleupon.png" align="absmiddle" border="0" height="16" width="16"></a>  <a class="AddTo" title="Add this page to Mr. Wong" onclick="return socialLinks.addto(13);" href="#"><img src="customgtkcontrol.aspx_files/AddTo_MrWong.png" align="absmiddle" border="0" height="16" width="16"></a>  
+</div>
+	
+	<table id="ctl00_RateArticleRow" class="RatingBar" border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tbody><tr>
+				<td><a href="#_top">Article Top</a></td>
+				<td align="right">            
+<table cellpadding="0" cellspacing="0" width="100%"><tbody><tr>
+
+	
+	
+	<td id="voteTbl" style="white-space: nowrap;" class="SmallText" align="right">
+	
+		<table><tbody><tr>
+		<td id="ctl00_RateArticle_SignIn" nowrap="nowrap"><a href="#SignUp">Sign Up</a> to vote for this article</td>
+				
+		
+		
+		
+		
+		<td><span id="ctl00_RateArticle_ErrorMessage"></span></td>
+		</tr></tbody></table>
+		
+	</td>
+</tr></tbody></table>
+
+<div id="RateComDiv" style="display: none;">
+<table width="100%"><tbody><tr valign="top"><td align="right" width="100%">Your reason for this vote:</td>
+<td><textarea id="RateComment" rows="5" cols="60" style="width: 285px; float: right;"></textarea>
+</td></tr></tbody></table></div>
+
+
+
+</td>
+			</tr>
+		</tbody></table>
+		
+	</form>
+	
+	<div style="padding: 10px; overflow: hidden; text-align: center; white-space: nowrap;">
+		<script type="text/javascript">document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d7551%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAdm%2fServeImg.aspx%3fFile%3d%252fscript%252fAdm%252fimages%252fIronspeed.2008.09.09.468%2bx%2b60%2bWrite%2b10000%2bGenerate%2bWeb%2bApps.gif%26C%3dFalse%26adid%3d7551%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22468%22%20height%3d%2260%22%3e%3c%2fa%3e"));</script><a href="http://www.codeproject.com/Redir.aspx?adid=7551&amp;way=ban" target="_blank" rel="nofollow"><img src="customgtkcontrol.aspx_files/ServeImg_003.html" alt="" border="0" height="60" width="468"></a>
+		<iframe src="customgtkcontrol.aspx_files/ServeLinks.html" frameborder="0" height="60" scrolling="no" width="300"></iframe>					  
+	</div>
+
+	<a name="_comments"></a><!-- Forum Start -->
+<div id="_MessageBoard" onclick="return SwitchMessage(event, null)">
+	<table id="ForumTable" class="Frm_MainTable" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<td class="Frm_MsgAlert"><b>You must <a href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fstatic%2fcustomgtkcontrol.aspx%3ffid%3d1326365%26df%3d90%26mpp%3d25%26noise%3d3%26sort%3dPosition%26view%3dQuick">Sign In</a> to use this message board.</b></td>
+		</tr><tr>
+			<td><form action="/script/Forums/SetOptions.aspx?floc=%2fKB%2fstatic%2fcustomgtkcontrol.aspx&amp;fid=1326365&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick" method="get" style="margin: 0pt; padding: 0pt;">
+				<input name="fid" value="1326365" type="hidden"><input name="currentQS" value="?floc=%2fKB%2fstatic%2fcustomgtkcontrol.aspx&amp;fid=1326365&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick" type="hidden"><input name="floc" value="/KB/static/customgtkcontrol.aspx" type="hidden"><table border="0" cellpadding="3" cellspacing="0" width="100%">
+					<tbody><tr class="Frm_HeaderRow1">
+						<td style="white-space: nowrap;"><img src="customgtkcontrol.aspx_files/forum_faq.gif" alt="FAQ" align="middle" border="0" height="16" width="16">&nbsp;<a href="http://www.codeproject.com/script/Forums/FAQ.aspx"><b>FAQ</b></a>&nbsp;</td><td style="white-space: nowrap; text-align: right;">Noise Tolerance<select size="1" class="Frm_DropDown" name="noise">
+							<option value="1">Very High</option><option value="2">High</option><option selected="selected" value="3">Medium</option><option value="4">Low</option><option value="5">Very Low</option>
+						</select></td><td colspan="2" style="white-space: nowrap; text-align: right;"><img src="customgtkcontrol.aspx_files/forum_search.gif" alt="Search" align="top" border="0" height="15" width="16">&nbsp;<a href="http://www.codeproject.com/script/Forums/Search.aspx?fid=1326365">Search Messages</a>&nbsp;</td><td style="text-align: right;"><input value="Set Options" name="SetOpt" class="Frm_Button" type="submit"></td>
+					</tr><tr class="Frm_HeaderRow2">
+						<td style="width: 100%;">&nbsp;</td><td style="white-space: nowrap; text-align: right;">Layout<select size="1" class="Frm_DropDown" name="view">
+							<option selected="selected" value="Quick">Normal</option><option value="Topic">Expand Root Messages</option><option value="Expanded">Expand All Messages</option><option value="Thread">Thread View</option><option value="Normal">No Javascript (slow)</option><option value="Preview">No Javascript Preview</option>
+						</select>&nbsp;&nbsp;</td><td style="white-space: nowrap;">Per page<select size="1" class="Frm_DropDown" name="mpp">
+							<option value="10">10</option><option selected="selected" value="25">25</option><option value="50">50</option>
+						</select>&nbsp;&nbsp;</td><td colspan="2">&nbsp;</td>
+					</tr>
+				</tbody></table>
+			</form></td>
+		</tr><tr>
+			<td><a name="xx0xx"></a><table border="0" cellpadding="2" cellspacing="0" width="100%">
+				<tbody><tr class="Frm_NavigationBar">
+					<td>&nbsp;</td><td>Msgs 1 to 6 of 6 (Total in Forum: 6) (<a href="http://www.codeproject.com/KB/static/customgtkcontrol.aspx?fid=1326365&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick">Refresh</a>)</td><td style="text-align: right; white-space: nowrap;"><span class="Frm_HL">First</span><span class="Frm_HL">Prev</span><span class="Frm_HL">Next</span></td>
+				</tr>
+			</tbody></table></td>
+		</tr><tr>
+			<td><table class="Frm_MsgTable" border="0" cellpadding="0" cellspacing="0" width="100%">
+				<tbody><tr>
+					<td><img src="customgtkcontrol.aspx_files/t.gif" alt="" border="0" height="5" width="1"></td>
+				</tr>
+<!-- Start Message head -->
+
+				<tr class="MsgHd Rt HdUnSel" id="F2597402_h0">
+					<td width="100%"><table class="QuickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tbody><tr>
+							<td class="Frm_MsgIndent" width="16"><a name="xx2597402xx"></a><img src="customgtkcontrol.aspx_files/msg_general.gif" alt="General" align="top" height="16" width="16"></td><td class="Frm_MsgSubject"><a id="DynMessLink" name="2597402" href="http://www.codeproject.com/KB/static/customgtkcontrol.aspx?fid=1326365&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2597402#xx2597402xx">advantages of gtk# over winforms</a></td><td style="width: 20px; white-space: nowrap;"><img src="customgtkcontrol.aspx_files/member_sm.gif" title="member" alt="member" border="0" height="16"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2822692">Leblanc Meneses</a></td><td class="Frm_MsgDate" style="vertical-align: top; white-space: nowrap;">22:49 13 Jun '08 &nbsp;</td>
+						</tr>
+					</tbody></table></td>
+				</tr><!-- End Message head -->
+
+				<tr id="F2597402_h1" style="display: none;">
+					<td style="width: 100%;"><table class="QuickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tbody><tr>
+							<td class="Frm_MsgIndent" style="width: 16px;"></td><td class="MsgBd BdSel"><table border="0" cellpadding="0" cellspacing="5" width="100%">
+								<tbody><tr>
+									<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+										<tbody><tr>
+											<td colspan="2">first
+off .. i love the mono project... i hope to see it flourish even more
+in the coming years. opensuse with compiz + vmware (window xp/2003 vms)
+rocks for dev work. <br><br><br>now the point to my message:<br>I
+don't like the idea of having to install gtk library on windows to run
+a linux/windows compatible software. Especially now that mono claims to
+support winforms 100%. - as of a couple of days before you posted this.
+<br><br><br>What are the advantages of developing my next application in gtk# vs using winforms?<br><br><br>the
+biggest advantage of sticking to winforms is no need for gtk library
+when on windows. the app runs with native il instead of going through
+an adapter the gtk provides to support win and linux. when on linux the
+mono vm should convert the winform object to gtk.... i like this idea
+better. what are your thoughts?<br><br><br><br>in your article you mention other architectures for design surfaces:<br>http://www.codeproject.com/KB/WPF/WPFDiagramDesigner_Part3.aspx<br><br>to bad it won't run on mono yet..<br><br>so
+I'm debating on whether to dabble in winform technology or move on to
+wpf and wait for mono to catch up.... (should i inherit from winform
+control or wpf ContentControl)<br><br>if i was a big company i would
+stick to winform technlogy to allow my project to run on both operating
+systems. since i am a small company and the majority of my customers
+are windows based wpf has taken care of the difficult problems i would
+need to manually implement in winforms: animations, 3d, vector objects<br><br>hopefully the moonlight project is a step towards a desktop based wpf.<br><br>- lm <br></td>
+										</tr><tr style="vertical-align: middle;">
+											<td class="Frm_MsgFt"><a class="Frm_MHL" href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fstatic%2fcustomgtkcontrol.aspx">Sign In</a>·<a class="Frm_MHL" href="http://www.codeproject.com/KB/static/customgtkcontrol.aspx?fid=1326365&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2597402" title="View Thread">View Thread</a>·<a class="Frm_MHL" href="http://www.codeproject.com/script/Forums/View.aspx?fid=1326365&amp;msg=2597402" title="Get permanent link">PermaLink</a></td><td class="Frm_MsgFt" style="text-align: right;"><span id="MVF2597402" style="white-space: nowrap;"></span></td>
+										</tr>
+									</tbody></table></td>
+								</tr>
+							</tbody></table></td>
+						</tr>
+					</tbody></table></td>
+				</tr><tr class="Quick">
+					<td class="Frm_MsgDivide"><img src="customgtkcontrol.aspx_files/t.gif" alt="" border="0" height="1" width="1"></td>
+				</tr>
+<!-- Start Message head -->
+
+				<tr class="MsgHd HdUnSel" id="F2616300_h0">
+					<td width="100%"><table class="QuickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tbody><tr>
+							<td class="Frm_MsgIndent" width="34"><a name="xx2616300xx"></a><img src="customgtkcontrol.aspx_files/msg_general.gif" alt="General" align="top" height="16" width="16"></td><td class="Frm_MsgSubject"><a id="DynMessLink" name="2616300" href="http://www.codeproject.com/KB/static/customgtkcontrol.aspx?fid=1326365&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2616300#xx2616300xx">Re: advantages of gtk# over winforms</a></td><td style="width: 20px; white-space: nowrap;"><img src="customgtkcontrol.aspx_files/member_sm.gif" title="member" alt="member" border="0" height="16"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1090000">Olivier Lecointre</a></td><td class="Frm_MsgDate" style="vertical-align: top; white-space: nowrap;">5:19 28 Jun '08 &nbsp;</td>
+						</tr>
+					</tbody></table></td>
+				</tr><!-- End Message head -->
+
+				<tr id="F2616300_h1" style="display: none;">
+					<td style="width: 100%;"><table class="QuickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tbody><tr>
+							<td class="Frm_MsgIndent" style="width: 34px;"></td><td class="MsgBd BdSel"><table border="0" cellpadding="0" cellspacing="5" width="100%">
+								<tbody><tr>
+									<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+										<tbody><tr>
+											<td colspan="2">I
+think the main reason the Mono project made a great effort to support
+Winforms is probably for the reason you state, compatibility.<br>Winforms
+looks indeed a better alternative if you want compatibility between
+Linux/Windows but this is not something that I wanted to achieve
+primarily.<br><br>My main environment is now Linux/Gtk and I am
+developing under that environment. I chose to use Gtk# over Winforms as
+the integration in the environment is more mature and the UI object
+model seems to make more sense. I believe that the UI logic should be
+designed so that the platform on which it is rendered doesn't matter as
+much. <br><br>For example, I usually define interfaces to only exposes
+the functionalities that I want on a control. I can this way easily
+change the underlying rendering library to use Gtk# or Winforms. I will
+have of course to re-implement the Gtk# library for Windows Winforms,
+but that also allows me to use a completely different rendering
+environment (MAC for example), as long as Mono is available for it.<br><br>Another
+advantage to this approach is the possibility to use each environment
+to its fullest potential. I have plenty of Windows functionalities that
+are not in the base libraries (COM system calls and third parties
+libraries) that won't work with Mono. If I can replicate them on Gtk
+with different libraries, then an interface will do the trick and it
+will be transparent to the application. However, that requires more
+effort and the knowledge of two environments instead of only one.<br><br>From
+what you are saying, it seems that your application relies heavily on
+UI rendering. Since Windows seems to be the main platform for your
+clients, I would most certainly use WPF to gain some time in
+development and forget about compatibility at first. Once you have a
+better understanding of your UI implementation you can always refactor
+it to support Winforms on Linux. Moonlight may be fully functional by
+then. At least that is what I would do. <br><br><div class="ForumSig">Olivier Lecointre<br>lecointre@gmail.com</div><br></td>
+										</tr><tr style="vertical-align: middle;">
+											<td class="Frm_MsgFt"><a class="Frm_MHL" href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fstatic%2fcustomgtkcontrol.aspx">Sign In</a>·<a class="Frm_MHL" href="http://www.codeproject.com/KB/static/customgtkcontrol.aspx?fid=1326365&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2597402" title="View Thread">View Thread</a>·<a class="Frm_MHL" href="http://www.codeproject.com/script/Forums/View.aspx?fid=1326365&amp;msg=2616300" title="Get permanent link">PermaLink</a></td><td class="Frm_MsgFt" style="text-align: right;"><span id="MVF2616300" style="white-space: nowrap;"></span></td>
+										</tr>
+									</tbody></table></td>
+								</tr>
+							</tbody></table></td>
+						</tr>
+					</tbody></table></td>
+				</tr><tr class="Quick">
+					<td class="Frm_MsgRtDivide"><img src="customgtkcontrol.aspx_files/t.gif" alt="" border="0" height="1" width="1"></td>
+				</tr>
+<!-- Start Message head -->
+
+				<tr class="MsgHd Rt HdUnSel" id="F2583670_h0">
+					<td width="100%"><table class="QuickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tbody><tr>
+							<td class="Frm_MsgIndent" width="16"><a name="xx2583670xx"></a><img src="customgtkcontrol.aspx_files/msg_general.gif" alt="General" align="top" height="16" width="16"></td><td class="Frm_MsgSubject"><a id="DynMessLink" name="2583670" href="http://www.codeproject.com/KB/static/customgtkcontrol.aspx?fid=1326365&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2583670#xx2583670xx">Lunar eclipse</a></td><td style="width: 20px; white-space: nowrap;"><img src="customgtkcontrol.aspx_files/member_sm.gif" title="member" alt="member" border="0" height="16"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4877339">Baimey</a></td><td class="Frm_MsgDate" style="vertical-align: top; white-space: nowrap;">20:43 4 Jun '08 &nbsp;</td>
+						</tr>
+					</tbody></table></td>
+				</tr><!-- End Message head -->
+
+				<tr id="F2583670_h1" style="display: none;">
+					<td style="width: 100%;"><table class="QuickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tbody><tr>
+							<td class="Frm_MsgIndent" style="width: 16px;"></td><td class="MsgBd BdSel"><table border="0" cellpadding="0" cellspacing="5" width="100%">
+								<tbody><tr>
+									<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+										<tbody><tr>
+											<td colspan="2">I'm now currently working on moonlight.<br>Have u worked on it?<br>If
+yes, will you please provide me with a sample on moonlight, and
+describe the process of compilation through gnome terminal in Open Suse.<br><br>thanks <br>paru  <img src="customgtkcontrol.aspx_files/smiley_rolleyes.gif" alt="Roll eyes" align="top"> <br></td>
+										</tr><tr style="vertical-align: middle;">
+											<td class="Frm_MsgFt"><a class="Frm_MHL" href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fstatic%2fcustomgtkcontrol.aspx">Sign In</a>·<a class="Frm_MHL" href="http://www.codeproject.com/KB/static/customgtkcontrol.aspx?fid=1326365&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2583670" title="View Thread">View Thread</a>·<a class="Frm_MHL" href="http://www.codeproject.com/script/Forums/View.aspx?fid=1326365&amp;msg=2583670" title="Get permanent link">PermaLink</a></td><td class="Frm_MsgFt" style="text-align: right;"><span id="MVF2583670" style="white-space: nowrap;"></span></td>
+										</tr>
+									</tbody></table></td>
+								</tr>
+							</tbody></table></td>
+						</tr>
+					</tbody></table></td>
+				</tr><tr class="Quick">
+					<td class="Frm_MsgRtDivide"><img src="customgtkcontrol.aspx_files/t.gif" alt="" border="0" height="1" width="1"></td>
+				</tr>
+<!-- Start Message head -->
+
+				<tr class="MsgHd Rt HdUnSel" id="F2559775_h0">
+					<td width="100%"><table class="QuickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tbody><tr>
+							<td class="Frm_MsgIndent" width="16"><a name="xx2559775xx"></a><img src="customgtkcontrol.aspx_files/msg_general.gif" alt="General" align="top" height="16" width="16"></td><td class="Frm_MsgSubject"><a id="DynMessLink" name="2559775" href="http://www.codeproject.com/KB/static/customgtkcontrol.aspx?fid=1326365&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2559775#xx2559775xx">MonoDevelop</a></td><td style="width: 20px; white-space: nowrap;"><img src="customgtkcontrol.aspx_files/member_sm.gif" title="member" alt="member" border="0" height="16"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2425996">thund3rstruck</a></td><td class="Frm_MsgDate" style="vertical-align: top; white-space: nowrap;">4:40 19 May '08 &nbsp;</td>
+						</tr>
+					</tbody></table></td>
+				</tr><!-- End Message head -->
+
+				<tr id="F2559775_h1" style="display: none;">
+					<td style="width: 100%;"><table class="QuickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tbody><tr>
+							<td class="Frm_MsgIndent" style="width: 16px;"></td><td class="MsgBd BdSel"><table border="0" cellpadding="0" cellspacing="5" width="100%">
+								<tbody><tr>
+									<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+										<tbody><tr>
+											<td colspan="2">I'm
+curious if you're using MonoDevelop for your Linux development? A few
+months back I made a commitment to do cross-platform C# development for
+a client but it turned out that in Ubuntu 7.10, monodevelop was so
+buggy and crashed even on the simplest forms application I had to tuck
+my tail between my legs and quietly with drawl from any real enterprise
+cross platform development.<br><br>Is monodevelop stable enough now to where it doesn't crash every 5 minutes? <br></td>
+										</tr><tr style="vertical-align: middle;">
+											<td class="Frm_MsgFt"><a class="Frm_MHL" href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fstatic%2fcustomgtkcontrol.aspx">Sign In</a>·<a class="Frm_MHL" href="http://www.codeproject.com/KB/static/customgtkcontrol.aspx?fid=1326365&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2559775" title="View Thread">View Thread</a>·<a class="Frm_MHL" href="http://www.codeproject.com/script/Forums/View.aspx?fid=1326365&amp;msg=2559775" title="Get permanent link">PermaLink</a></td><td class="Frm_MsgFt" style="text-align: right;"><span id="MVF2559775" style="white-space: nowrap;"></span></td>
+										</tr>
+									</tbody></table></td>
+								</tr>
+							</tbody></table></td>
+						</tr>
+					</tbody></table></td>
+				</tr><tr class="Quick">
+					<td class="Frm_MsgDivide"><img src="customgtkcontrol.aspx_files/t.gif" alt="" border="0" height="1" width="1"></td>
+				</tr>
+<!-- Start Message head -->
+
+				<tr class="MsgHd HdUnSel" id="F2559895_h0">
+					<td width="100%"><table class="QuickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tbody><tr>
+							<td class="Frm_MsgIndent" width="34"><a name="xx2559895xx"></a><img src="customgtkcontrol.aspx_files/msg_general.gif" alt="General" align="top" height="16" width="16"></td><td class="Frm_MsgSubject"><a id="DynMessLink" name="2559895" href="http://www.codeproject.com/KB/static/customgtkcontrol.aspx?fid=1326365&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2559895#xx2559895xx">Re: MonoDevelop</a></td><td style="width: 20px; white-space: nowrap;"><img src="customgtkcontrol.aspx_files/member_sm.gif" title="member" alt="member" border="0" height="16"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1674918">Member 1674918</a></td><td class="Frm_MsgDate" style="vertical-align: top; white-space: nowrap;">5:53 19 May '08 &nbsp;</td>
+						</tr>
+					</tbody></table></td>
+				</tr><!-- End Message head -->
+
+				<tr id="F2559895_h1" style="display: none;">
+					<td style="width: 100%;"><table class="QuickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tbody><tr>
+							<td class="Frm_MsgIndent" style="width: 34px;"></td><td class="MsgBd BdSel"><table border="0" cellpadding="0" cellspacing="5" width="100%">
+								<tbody><tr>
+									<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+										<tbody><tr>
+											<td colspan="2">I use Monodevelop;  recent versions have been much more stable than in the past (on openSUSE at least) <br></td>
+										</tr><tr style="vertical-align: middle;">
+											<td class="Frm_MsgFt"><a class="Frm_MHL" href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fstatic%2fcustomgtkcontrol.aspx">Sign In</a>·<a class="Frm_MHL" href="http://www.codeproject.com/KB/static/customgtkcontrol.aspx?fid=1326365&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2559775" title="View Thread">View Thread</a>·<a class="Frm_MHL" href="http://www.codeproject.com/script/Forums/View.aspx?fid=1326365&amp;msg=2559895" title="Get permanent link">PermaLink</a></td><td class="Frm_MsgFt" style="text-align: right;"><span id="MVF2559895" style="white-space: nowrap;"></span></td>
+										</tr>
+									</tbody></table></td>
+								</tr>
+							</tbody></table></td>
+						</tr>
+					</tbody></table></td>
+				</tr><tr class="Quick">
+					<td class="Frm_MsgDivide"><img src="customgtkcontrol.aspx_files/t.gif" alt="" border="0" height="1" width="1"></td>
+				</tr>
+<!-- Start Message head -->
+
+				<tr class="MsgHd LoVote HdUnSel" id="F2560372_h0">
+					<td width="100%"><table class="QuickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tbody><tr>
+							<td class="Frm_MsgIndent" width="34"><a name="xx2560372xx"></a><img src="customgtkcontrol.aspx_files/msg_general.gif" alt="General" align="top" height="16" width="16"></td><td class="Frm_MsgSubject"><a id="DynMessLink" name="2560372" href="http://www.codeproject.com/KB/static/customgtkcontrol.aspx?fid=1326365&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2560372#xx2560372xx">Re: MonoDevelop</a></td><td style="width: 20px; white-space: nowrap;"><img src="customgtkcontrol.aspx_files/member_sm.gif" title="member" alt="member" border="0" height="16"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1090000">Olivier Lecointre</a></td><td class="Frm_MsgDate" style="vertical-align: top; white-space: nowrap;">12:31 19 May '08 &nbsp;</td>
+						</tr>
+					</tbody></table></td>
+				</tr><!-- End Message head -->
+
+				<tr id="F2560372_h1" style="display: none;">
+					<td style="width: 100%;"><table class="QuickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tbody><tr>
+							<td class="Frm_MsgIndent" style="width: 34px;"></td><td class="MsgBd BdSel"><table border="0" cellpadding="0" cellspacing="5" width="100%">
+								<tbody><tr>
+									<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+										<tbody><tr>
+											<td colspan="2">MonoDevelop is definitely more stable now and I had to wait for Ubuntu 8.04 to benefit directly from the version 1.0.<br>The build was always a headache whereas with 8.04 the version 1.0 comes as a package.<br>I am using exclusively MonoDevelop for all my C# development.<br>The only real problem is the lack of step-by-step debugging.<br>There
+are still a few occasional crashes, mainly when working with the
+designer, but not enough to be too bothersome (maybe 1 or 2 in a day's
+work).<br>It happens mainly when the layout is changed, or when some controls are moved or deleted.<br>If you have a clear idea of the form when you start using the designer then that should not happen that often.<br>Sometime I also have some crashes when I add a folder or a file.<br>But
+usually when I restart MonoDevelop, everything is as expected (I have
+the habit of forcing a save before adding a file or folder).<br>If I
+would have to develop an enterprise cross platform system, I would
+probably still write most of the non UI libraries on Visual Studio
+(because of the debugging functionality) and keep only the UI
+integration with MonoDevelop. But the integrated debugger is almost
+ready and I am eager for its release. <br><br><div class="ForumSig">Olivier Lecointre<br>lecointre@gmail.com</div><br></td>
+										</tr><tr style="vertical-align: middle;">
+											<td class="Frm_MsgFt"><a class="Frm_MHL" href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fstatic%2fcustomgtkcontrol.aspx">Sign In</a>·<a class="Frm_MHL" href="http://www.codeproject.com/KB/static/customgtkcontrol.aspx?fid=1326365&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2559775" title="View Thread">View Thread</a>·<a class="Frm_MHL" href="http://www.codeproject.com/script/Forums/View.aspx?fid=1326365&amp;msg=2560372" title="Get permanent link">PermaLink</a></td><td class="Frm_MsgFt" style="text-align: right;"><span id="MVF2560372" style="white-space: nowrap;">2.00/5 (1 vote) </span></td>
+										</tr>
+									</tbody></table></td>
+								</tr>
+							</tbody></table></td>
+						</tr>
+					</tbody></table></td>
+				</tr><tr>
+					<td><img src="customgtkcontrol.aspx_files/t.gif" alt="" border="0" height="5" width="1"></td>
+				</tr>
+			</tbody></table></td>
+		</tr><tr>
+			<td><table cellpadding="2" cellspacing="0" width="100%">
+				<tbody><tr class="Frm_Footer">
+					<td>Last Visit: Thursday, November 27, 2008 9:21 PM &nbsp; &nbsp; Last Update:Thursday, November 27, 2008 9:21 PM</td><td style="text-align: right; white-space: nowrap;"></td>
+				</tr>
+			</tbody></table></td>
+		</tr>
+	</tbody></table>
+</div><p class="SmallText"><img src="customgtkcontrol.aspx_files/msg_general.gif" alt="General" align="top" height="16" width="16"> General &nbsp;&nbsp; <img src="customgtkcontrol.aspx_files/msg_news.gif" alt="News" align="top" height="16" width="16"> News &nbsp;&nbsp; <img src="customgtkcontrol.aspx_files/msg_question.gif" alt="Question" align="top" height="16" width="16"> Question &nbsp;&nbsp; <img src="customgtkcontrol.aspx_files/msg_answer.gif" alt="Answer" align="top" height="16" width="16"> Answer &nbsp;&nbsp; <img src="customgtkcontrol.aspx_files/msg_joke.gif" alt="Joke" align="top" height="16" width="16"> Joke &nbsp;&nbsp; <img src="customgtkcontrol.aspx_files/msg_rant.gif" alt="Rant" align="top" height="16" width="16"> Rant &nbsp;&nbsp; <img src="customgtkcontrol.aspx_files/msg_admin.gif" alt="Admin" align="top" height="16" width="16"> Admin &nbsp;&nbsp; </p>
+<!-- Forum End -->
+
+
+
+
+	
+	</div>
+	<table width="100%">
+	<tbody><tr valign="top">
+		<td class="TinyText" align="left">
+		    <a id="ctl00_PermaLink" href="http://www.codeproject.com/script/Articles/Article.aspx?aid=26161">PermaLink</a> | 
+			<a id="ctl00_PrivacyLink" href="http://www.codeproject.com/info/privacy.aspx">Privacy</a> |
+			<a id="ctl00_TermsOfUseLink" href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of Use</a>
+			<br>Last Updated: 18 May 2008<br>
+			Editor: <a id="ctl00_ArticleEditor" href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=28970">Smitha Vijayan</a><br>
+		</td>
+		<td class="TinyText" align="right" valign="top">
+			Copyright 2008 by Olivier Lecointre<br>Everything else
+			Copyright © <a href="mailto:webmaster@codeproject.com">CodeProject</a>, 1999-2008 <br>
+			Web12 |
+			<a id="ctl00_AdvertiseLink" href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on the Code Project </a>
+		</td>
+	</tr>
+	
+	</tbody></table>
+	
+	<center>
+		
+	</center>
+</td>
+</tr>
+<tr>
+	<td colspan="2" align="center">
+	
+
+
+
+	</td>
+</tr>
+</tbody></table>
+
+<br>
+<script type="text/javascript" language="Javascript">//<![CDATA[
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+//]]></script>
+
+<script type="text/javascript" language="Javascript" src="customgtkcontrol.aspx_files/TogglePre.js"></script>
+<script type="text/javascript" language="Javascript" src="customgtkcontrol.aspx_files/menu132_com.js"></script>
+<script type="text/javascript" language="Javascript" src="customgtkcontrol.aspx_files/TopNavBar.js"></script>
+<script type="text/javascript" language="Javascript">//<![CDATA[
+new HVMenu(new menu_NavbarConfig());
+//]]></script>
+
+<script type="text/javascript" language="Javascript">//<![CDATA[
+$(document).ready(function() {RetrieveJobsSummary('Th',26161,2,74,"65,81,162,179,12,62,98,118,148,153");});
+//]]></script>
+
+
+<div style="position: absolute; visibility: visible; z-index: 101; width: 386px; height: 22px; top: 126px; left: 877px;"><div class="NavBarMain" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 40px; height: 16px; padding-left: 5px; padding-top: 2px; left: 7px; top: 2px;">Help!</div><div class="NavBarMain" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 55px; height: 16px; padding-left: 5px; padding-top: 2px; left: 55px; top: 2px;">Articles</div><div class="NavBarMain" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 115px; height: 16px; padding-left: 5px; padding-top: 2px; left: 118px; top: 2px;">Message Boards</div><div class="NavBarMain" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 75px; height: 16px; padding-left: 5px; padding-top: 2px; left: 241px; top: 2px;">Job Board</div><div class="NavBarMain" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 55px; height: 16px; padding-left: 5px; padding-top: 2px; left: 324px; top: 2px;">Lounge</div></div><div class="NavBarCont" style="position: absolute; visibility: hidden; z-index: 102; width: 198px; height: 104px; top: 0pt; left: 0pt;"><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 183px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 5px;">What is 'The Code Project'?</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 183px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 24px;">General FAQ</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 183px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 43px;">Post a Question</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 183px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 62px;">Site Directory</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 183px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 81px;">About Us</div></div><div class="NavBarCont" style="position: absolute; visibility: hidden; z-index: 102; width: 158px; height: 161px; top: 0pt; left: 0pt;"><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 143px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 5px;">Latest</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 143px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 24px;">Search</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 143px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 43px;">Most Popular</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 143px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 62px;">Beginner Articles</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 143px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 81px;">Topic List</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 143px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 100px;">Submit an Article</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 143px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 119px;">Update an Article</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 143px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 138px;">Article Competition</div></div><div class="NavBarCont" style="position: absolute; visibility: hidden; z-index: 102; width: 183px; height: 389px; top: 0pt; left: 0pt;"><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 5px;">ASP.NET</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 24px;">ATL / WTL / STL</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 43px;">C++ / MFC</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 62px;">(Managed) C++/CLI</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 81px;">C#</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 100px;">COM</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 119px;">Hardware</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 138px;">LINQ and .NET 3.5</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 157px;">.NET Framework</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 176px;">OS / SysAdmin</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 195px;">Silverlight</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 214px;">General Database</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 233px;">VB.NET</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 252px;">Web Development</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 271px;">WPF / WCF / WF</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 290px;">XML / XSL</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 309px;">General Discussions</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 328px;">Suggestions / Site Bugs</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 347px;">The Soapbox</div><div class="NavBarSub" style="overflow: hidden; position: absolute; visibility: inherit; cursor: pointer; width: 168px; height: 16px; padding-left: 5px; padding-top: 2px; left: 5px; top: 366px;">All Message Boards...</div></div></body></html>
