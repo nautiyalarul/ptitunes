@@ -37,6 +37,13 @@ Have a nice non-clickable image with 8-spots corresponding to our 8 buttons chan
 help: http://pupeno.com/blog/svgs-in-.net-using-cairo-and-gtk-and-c
 Required installing the library: librsvg2-2.18-cil not present. (installed as rgsv2-sharp-2.0 in the references, make sure to restart monodevelop to see it in the references list).
 
+librsvg C doc
+http://librsvg.sourceforge.net/docs/html/
+having dynamic svg:
+http://macslow.thepimp.net/?p=58
+
+
+
 *2. Disabling of view if no USB device found*
 
 *3.
