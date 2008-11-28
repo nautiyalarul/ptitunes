@@ -1,0 +1,10 @@
+<objects>
+  <object type="GtkControl.MVPanel" palette-category="GtkControl" allow-children="false" base-type="Gtk.Bin">
+    <itemgroups />
+    <signals />
+  </object>
+  <object type="GtkControl.kk" palette-category="GtkControl" allow-children="false" base-type="Gtk.Bin">
+    <itemgroups />
+    <signals />
+  </object>
+</objects>
