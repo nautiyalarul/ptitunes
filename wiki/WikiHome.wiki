@@ -44,6 +44,13 @@ http://macslow.thepimp.net/?p=58
 http://www.codeproject.com/KB/static/customgtkcontrol.aspx
 Movable controls with customized rendering on Linux with Mono. 
 
+will probably have Gtk.fixed with .add(to put bg image (tested)) and .put to put EventBoxes (containing images) on top.
+When (real, physical) finger over eventbox, img will swap.
+When sweeping from one sensor to another, all the sensors on the path are highlighted / blink.
+
+http://www.ndesk.org/DBusSharp
+an equivalent to iPod having dbus support on Linux is banshee
+http://www.kryogenix.org/days/2008/07/02/controlling-banshee-over-d-bus
 
 *2. Disabling of view if no USB device found*
 
