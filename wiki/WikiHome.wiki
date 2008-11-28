@@ -52,6 +52,19 @@ http://www.ndesk.org/DBusSharp
 an equivalent to iPod having dbus support on Linux is banshee
 http://www.kryogenix.org/days/2008/07/02/controlling-banshee-over-d-bus
 
+MPRIS for several media players
+http://wiki.xmms2.xmms.se/wiki/MPRIS#D-Bus
+http://wiki.xmms2.xmms.se/wiki/Media_Player_Interfaces#About_MPRIS
+Projects involved 
+ XMMS2 
+For XMMS2, a proxy could be developed to translate between DBUS and XMMS2's own  IPC mechanism. (Anders may have already done some work on this) 
+ BMPx 
+ VLC 
+ Amarok 
+ Audacious 
+ Dragon player 
+ 
+
 *2. Disabling of view if no USB device found*
 
 *3.
