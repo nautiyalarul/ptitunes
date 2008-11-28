@@ -38,6 +38,9 @@ Python + QT4 + SVG for the click wheel canvas
 we keep the main UI
 we do DBUS for Linux (MPRIS protocol) & COM for Windows
 
+Qt Svg drawing things with different colors (chess example)
+http://forum.qtfr.org/viewtopic.php?id=7269
+
 MPRIS for several media players
 http://wiki.xmms2.xmms.se/wiki/MPRIS#D-Bus
 http://wiki.xmms2.xmms.se/wiki/Media_Player_Interfaces#About_MPRIS
