@@ -1,0 +1,16 @@
+<Combine name="gtkCustomControlsTutorialTest" fileversion="2.0">
+  <Configurations active="Debug">
+    <Configuration name="Debug" ctype="CombineConfiguration">
+      <Entry build="True" name="gtkCustomControlsTutorialTest" configuration="Debug" />
+    </Configuration>
+    <Configuration name="Release" ctype="CombineConfiguration">
+      <Entry build="True" name="gtkCustomControlsTutorialTest" configuration="Release" />
+    </Configuration>
+  </Configurations>
+  <StartMode startupentry="gtkCustomControlsTutorialTest" single="True">
+    <Execute type="None" entry="gtkCustomControlsTutorialTest" />
+  </StartMode>
+  <Entries>
+    <Entry filename="gtkCustomControlsTutorialTest/gtkCustomControlsTutorialTest.mdp" />
+  </Entries>
+</Combine>

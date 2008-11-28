@@ -1,0 +1,16 @@
+<Combine name="GtkControl" fileversion="2.0">
+  <Configurations active="Debug">
+    <Configuration name="Debug" ctype="CombineConfiguration">
+      <Entry build="True" name="GtkControl" configuration="Debug" />
+    </Configuration>
+    <Configuration name="Release" ctype="CombineConfiguration">
+      <Entry build="True" name="GtkControl" configuration="Release" />
+    </Configuration>
+  </Configurations>
+  <StartMode startupentry="GtkControl" single="True">
+    <Execute type="None" entry="GtkControl" />
+  </StartMode>
+  <Entries>
+    <Entry filename="GtkControl.mdp" />
+  </Entries>
+</Combine>
