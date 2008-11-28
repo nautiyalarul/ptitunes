@@ -1,5 +1,5 @@
 #summary The home to all our project's wiki pages and documents. Work in progress...
-#labels Featured,WIP
+#labels Featured,WIP,Documentation
 
 = Quick introduction the project =
 
@@ -24,6 +24,21 @@ The PC software is made up of a GUI + 2 daemons (USB and DCOM or DBUS) has a cro
 === Graphical User Interface ===
 This interface is made in Java Swing(?) and shows in real time the finger position on the plugged device's sensors as well as the gestures that have recognized on the OS side thanks to packet filtering.
 
+==== GUI Features ====
+*1. Display of daemons states*
+Show status of connections with the DCOM/DBUS application and with the USB device with text.
+Statuses are:
+  # Unplugged, (icon theme: gtk-no)
+  # Plugged, (icon theme: gtk-yes).
+
+*2. Display of click wheel*
+Have a nice non-clickable image with 8-spots corresponding to our 8 buttons changing aspect when pressed... Have 
+
+help: http://pupeno.com/blog/svgs-in-.net-using-cairo-and-gtk-and-c
+
+*2. Disabling of view if no USB device found*
+
+*3.
 
 === Multimedia playback controller daemon ===
 It is made in Java and uses the for sending playback commands:
