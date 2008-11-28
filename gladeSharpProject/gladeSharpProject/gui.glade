@@ -1,24 +1,167 @@
-<?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
-<!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
- 
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
+<!--*- mode: xml -*-->
 <glade-interface>
- 
-<widget class="GtkWindow" id="window1">
-  <property name="visible">True</property>
-  <property name="title" translatable="yes">Glade Window</property>
- <property name="window_position">GTK_WIN_POS_CENTER</property>
-  <property name="modal">False</property>
-  <property name="default_width">256</property>
-  <property name="default_height">256</property>
-  <property name="type">GTK_WINDOW_TOPLEVEL</property>
-  <property name="resizable">True</property>
-  <property name="destroy_with_parent">False</property>
-  <signal name="delete_event" handler="OnWindowDeleteEvent"/>
-
-  <child>
-    <placeholder/>
-  </child>
-</widget>
- 
+  <widget class="GtkWindow" id="window1">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Glade Window</property>
+    <property name="window_position">GTK_WIN_POS_CENTER</property>
+    <property name="default_width">256</property>
+    <property name="default_height">256</property>
+    <signal name="delete_event" handler="OnWindowDeleteEvent"/>
+    <child>
+      <widget class="GtkFixed" id="fixed1">
+        <property name="visible">True</property>
+        <child>
+          <widget class="GtkHBox" id="PeripheralStatusesHBox">
+            <property name="width_request">256</property>
+            <property name="height_request">44</property>
+            <property name="visible">True</property>
+            <property name="homogeneous">True</property>
+            <child>
+              <widget class="GtkHBox" id="multimediaPlayerStatusHBox">
+                <property name="height_request">80</property>
+                <property name="visible">True</property>
+                <child>
+                  <widget class="GtkLabel" id="multimediaPlayerNameLabel">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Apple iTunes</property>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="GtkImage" id="multimediaPlayerIsAliveStatusIcon">
+                    <property name="visible">True</property>
+                    <property name="icon_name">gtk-yes</property>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkHBox" id="USBDeviceStatusHBox">
+                <property name="height_request">80</property>
+                <property name="visible">True</property>
+                <child>
+                  <widget class="GtkLabel" id="USBDeviceNameLabel">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">USB Touch Wheel</property>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="GtkImage" id="USBDeviceIsAliveStatusIcon">
+                    <property name="visible">True</property>
+                    <property name="icon_name">gtk-yes</property>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="x">183</property>
+            <property name="y">268</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkNotebook" id="notebook">
+            <property name="width_request">419</property>
+            <property name="height_request">267</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <child>
+              <widget class="GtkFixed" id="fixed2">
+                <property name="visible">True</property>
+                <child>
+                  <widget class="GtkViewport" id="viewport1">
+                    <property name="width_request">188</property>
+                    <property name="height_request">188</property>
+                    <property name="visible">True</property>
+                    <property name="resize_mode">GTK_RESIZE_QUEUE</property>
+                    <child>
+                      <widget class="GtkFixed" id="fixed3">
+                        <property name="width_request">175</property>
+                        <property name="height_request">175</property>
+                        <property name="visible">True</property>
+                        <property name="app_paintable">True</property>
+                        <child>
+                          <widget class="GtkEventBox" id="eventbox1">
+                            <property name="width_request">100</property>
+                            <property name="height_request">80</property>
+                            <property name="visible">True</property>
+                            <child>
+                              <widget class="GtkImage" id="image1">
+                                <property name="visible">True</property>
+                                <property name="stock">gtk-missing-image</property>
+                              </widget>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="x">35</property>
+                            <property name="y">20</property>
+                          </packing>
+                        </child>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="x">28</property>
+                    <property name="y">31</property>
+                  </packing>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="mainTabLabel">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Real-time finger actions</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="settingsTabLabel">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Settings</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="position">1</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="aboutTabLabel">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">About</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="position">2</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="x">10</property>
+            <property name="y">5</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
 </glade-interface>
-

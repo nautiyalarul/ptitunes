@@ -1,22 +1,15 @@
 ﻿<UserCombinePreferences version="1.0" filename="/home/jonathan/Prods/prog/PT1/gladeSharpProject/gladeSharpProject.mds">
-  <Files>
-    <File name="Welcome" />
-    <File name="gladeSharpProject/Main.cs" line="1" column="1" />
-  </Files>
+  <Files />
   <Views>
     <ViewMemento id="ProjectPad">
-      <Node expanded="True">
-        <Node name="gladeSharpProject" expanded="True">
-          <Node name="Main.cs" selected="True" />
-        </Node>
-      </Node>
+      <Node selected="True" />
     </ViewMemento>
     <ViewMemento id="ClassPad">
       <Node expanded="True" />
     </ViewMemento>
   </Views>
   <Properties>
-    <Property key="ActiveWindow" value="/home/jonathan/Prods/prog/PT1/gladeSharpProject/gladeSharpProject/Main.cs" />
+    <Property key="ActiveWindow" value="" />
     <Property key="ActiveConfiguration" value="Debug" />
   </Properties>
 </UserCombinePreferences>
