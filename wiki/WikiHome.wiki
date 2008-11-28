@@ -41,7 +41,8 @@ librsvg C doc
 http://librsvg.sourceforge.net/docs/html/
 having dynamic svg:
 http://macslow.thepimp.net/?p=58
-
+http://www.codeproject.com/KB/static/customgtkcontrol.aspx
+Movable controls with customized rendering on Linux with Mono. 
 
 
 *2. Disabling of view if no USB device found*
