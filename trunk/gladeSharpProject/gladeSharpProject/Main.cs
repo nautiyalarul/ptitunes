@@ -13,6 +13,31 @@ public class GladeApp
 	{
 		new GladeApp (args);
 	}
+	
+	static void on_mainTabLeftViewportFixed_expose_event(object obj, Gtk.ExposeEventArgs args)
+	{
+		Gtk.Fixed fix = (Gtk.Fixed) obj;
+		//Gtk.TreeView tv1 = Glade.XML("treeview1","");
+
+		//tv1.Model = ls;
+		
+		Gtk.Image clickWheelBgImage = new Gtk.Image("/home/jonathan/Prods/prog/PT1/188188.png");
+		clickWheelBgImage.SetSizeRequest(188,188);
+		clickWheelBgImage.Show();
+		fix.Add(clickWheelBgImage);
+	}
+	
+	void on_mainTabEventsTreeView_show(object obj, EventArgs args)
+	{
+		Gtk.ListStore ls = new Gtk.ListStore(typeof(Gdk.Pixbuf),typeof(string));
+	    //Gdk.Pixbuf pb = new Gdk.Pixbuf("/home/jonathan/Prods/prog/PT1/188188.png");
+		//ls.AppendValues(pb,"bonjour");
+		//GtK.CellRendererPixbuf crpb = Gtk.CellRendererPixbuf();
+		
+		Gtk.TreeView tv = new Gtk.TreeView(ls);
+		
+		
+	}
 
 	public GladeApp (string[] args) 
 	{
