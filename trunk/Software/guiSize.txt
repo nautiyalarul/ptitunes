@@ -1,0 +1,1 @@
+ Qgraphics view is : 271 (width) * 231 (height)

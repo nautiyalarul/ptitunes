@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>646</width>
-    <height>302</height>
+    <width>636</width>
+    <height>345</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -16,8 +16,8 @@
    <widget class="QWidget" name="layoutWidget" >
     <property name="geometry" >
      <rect>
-      <x>20</x>
-      <y>220</y>
+      <x>30</x>
+      <y>260</y>
       <width>241</width>
       <height>30</height>
      </rect>
@@ -73,7 +73,7 @@ p, li { white-space: pre-wrap; }
       <x>21</x>
       <y>11</y>
       <width>271</width>
-      <height>192</height>
+      <height>231</height>
      </rect>
     </property>
    </widget>
@@ -83,7 +83,7 @@ p, li { white-space: pre-wrap; }
       <x>293</x>
       <y>11</y>
       <width>331</width>
-      <height>192</height>
+      <height>231</height>
      </rect>
     </property>
     <row/>
@@ -134,16 +134,18 @@ p, li { white-space: pre-wrap; }
      </property>
     </item>
    </widget>
-   <zorder>layoutWidget</zorder>
+   <zorder>tableWidget</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>graphicsView</zorder>
+   <zorder>label_3</zorder>
+   <zorder></zorder>
   </widget>
   <widget class="QMenuBar" name="menubar" >
    <property name="geometry" >
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>646</width>
+     <width>636</width>
      <height>25</height>
     </rect>
    </property>
