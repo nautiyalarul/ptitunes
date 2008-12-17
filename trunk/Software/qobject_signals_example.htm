@@ -1,0 +1,398 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+  
+    <title> GUI Programming with PyQT</title>
+    <meta name="keywords" content="postgresql, support, recovery, design, software, hosting, expterise, programming, postgres, pgsql, replication, mysql, firebird, database, sql, free, open source, software">
+    <meta name="description" content="Command Prompt, Inc. is the largest and oldest US based commercial PostgreSQL support provider. We provide the only commercially viable integrated PostgreSQL replication solution, but also custom programming, and support. We authored the book Practical PostgreSQL, the procedural language plPHP, and adding trigger capability to plPerl. ">
+    <link rel="shortcut icon" href="http://www.commandprompt.com/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="qobject_signals_example_fichiers/layout.css">
+    <link rel="stylesheet" type="text/css" href="qobject_signals_example_fichiers/cmd4.css">
+    <script language="javascript" type="text/javascript"><!--
+      greymenuhomewideLit = new Image();
+      greymenuhomewideLit.src = "/images/greymenu_homewide_lit.gif";
+      greymenuaboutLit = new Image();
+      greymenuaboutLit.src = "/images/greymenu_about_lit.gif";
+      greymenuproductsLit = new Image();
+      greymenuproductsLit.src = "/images/greymenu_products_lit.gif";
+      greymenuservicesLit = new Image();
+      greymenuservicesLit.src = "/images/greymenu_services_lit.gif";
+      greymenusupportLit = new Image();
+      greymenusupportLit.src = "/images/greymenu_support_lit.gif";
+      greymenucommunityLit = new Image();
+      greymenucommunityLit.src = "/images/greymenu_community_lit.gif";
+    //--></script>
+    <script src="qobject_signals_example_fichiers/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript"><!--
+    _uacct = "UA-1598509-2";
+    urchinTracker();
+    //--></script>
+  <title>A parser-formatter using signals and slots</title><meta name="GENERATOR" content="Modular DocBook HTML Stylesheet Version 1.76b+"></head><body class="SECT1" alink="#0000ff" bgcolor="#ffffff" text="#000000" vlink="#840084" link="#0000ff">
+      <div align="center">
+       <div id="widecontainer">
+         <div id="widetop">
+           <div class="throwleft" style="width: 300px; text-align: left;"><a href="http://www.commandprompt.com/"><img src="qobject_signals_example_fichiers/cmd4logo_wide.gif" alt="Command Prompt, Inc." border="0"></a></div>
+           <div class="throwright" style="width: 400px; text-align: right;">
+             <div id="topright">
+               <form action="/community/pyqt/" name="cmdform" method="post">
+                 <ul>
+                   <li><input name="search" value="" type="text"></li>
+                   <li><input name="action" value="Search Book" type="submit"></li>
+                 </ul>
+               </form>
+             </div>
+           </div>
+         </div>
+          <ul id="greymenu_wide">
+            <li><a href="http://www.commandprompt.com/home/"><img onmouseover="this.src = greymenuhomewideLit.src;" onmouseout="this.src = '/images/greymenu_homewide.gif';" src="qobject_signals_example_fichiers/greymenu_homewide.gif" title="" alt="" border="0" height="22"></a></li><li><img src="qobject_signals_example_fichiers/greymenu_divider.gif" alt="|" border="0" width="2" height="22"></li><li><a href="http://www.commandprompt.com/about/"><img onmouseover="this.src = greymenuaboutLit.src;" onmouseout="this.src = '/images/greymenu_about.gif';" src="qobject_signals_example_fichiers/greymenu_about.gif" title="" alt="" border="0" height="22"></a></li><li><img src="qobject_signals_example_fichiers/greymenu_divider.gif" alt="|" border="0" width="2" height="22"></li><li><a href="http://www.commandprompt.com/products/"><img onmouseover="this.src = greymenuproductsLit.src;" onmouseout="this.src = '/images/greymenu_products.gif';" src="qobject_signals_example_fichiers/greymenu_products.gif" title="" alt="" border="0" height="22"></a></li><li><img src="qobject_signals_example_fichiers/greymenu_divider.gif" alt="|" border="0" width="2" height="22"></li><li><a href="http://www.commandprompt.com/services/"><img onmouseover="this.src = greymenuservicesLit.src;" onmouseout="this.src = '/images/greymenu_services.gif';" src="qobject_signals_example_fichiers/greymenu_services.gif" title="" alt="" border="0" height="22"></a></li><li><img src="qobject_signals_example_fichiers/greymenu_divider.gif" alt="|" border="0" width="2" height="22"></li><li><a href="http://www.commandprompt.com/support/"><img onmouseover="this.src = greymenusupportLit.src;" onmouseout="this.src = '/images/greymenu_support.gif';" src="qobject_signals_example_fichiers/greymenu_support.gif" title="" alt="" border="0" height="22"></a></li><li><img src="qobject_signals_example_fichiers/greymenu_divider.gif" alt="|" border="0" width="2" height="22"></li><li><a href="http://www.commandprompt.com/community/"><img onmouseover="this.src = greymenucommunityLit.src;" onmouseout="this.src = '/images/greymenu_community.gif';" src="qobject_signals_example_fichiers/greymenu_community.gif" title="" alt="" border="0" height="22"></a></li>          </ul>
+
+  
+        <div style="padding-left: 16px; width: 96%;">
+          <link rel="HOME" title="GUI Programming with Python: QT Edition" href="http://www.commandprompt.com/community/pyqt/book1"><link rel="UP" title="Signals and Slots in Depth" href="http://www.commandprompt.com/community/pyqt/c1267"><link rel="PREVIOUS" title="Disconnecting" href="http://www.commandprompt.com/community/pyqt/x1631"><link rel="NEXT" title="Conclusion" href="http://www.commandprompt.com/community/pyqt/x2026"><div class="NAVHEADER"><table summary="Header navigation table" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><th colspan="3" align="center">GUI Programming with Python: QT Edition</th></tr><tr><td align="left" valign="bottom" width="10%"><a href="http://www.commandprompt.com/community/pyqt/x1631" accesskey="P">Prev</a></td><td align="center" valign="bottom" width="80%">Chapter 7. Signals and Slots in Depth</td><td align="right" valign="bottom" width="10%"><a href="http://www.commandprompt.com/community/pyqt/x2026" accesskey="N">Next</a></td></tr></tbody></table><hr align="left" width="100%"></div><div class="SECT1"><h1 class="SECT1"><a name="CH6PARSERFORMATTER"></a>A parser-formatter using signals and slots</h1><p>The use of signals and slots in the
+      previous section was an example of using signals and slots in
+      GUI building. Of course, you can use signals and slots to link
+      GUI widgets with each other, and most of your slot
+      implementations will be in subclasses of
+      <tt class="CLASSNAME">QWidget</tt> &#8212; but the mechanism works
+      well under other circumstances. A GUI is not necessary.</p><p>In this section, I will show how signals
+      and slots make a natural extension to the event driven nature of
+      XML parsers. As you probably know, XML is a fairly simple
+      mark-up language that can be used to represent hierarchical
+      data. There are basically two ways to look at XML data. One is
+      to convert the data in one fell swoop into some hierarchical
+      representation (for example, dictionaries containing
+      dictionaries). This method is the DOM (data-object-model)
+      representation. Alternatively, you can parse the data character
+      by character, generating an event every time a certain chunk has
+      been completed; this is the SAX parser model.</p><p>Python contains support for both XML
+      handling models in its standard libraries. The currently
+      appreciated module is xml.sax, which can make use of the fast
+      expat parser. However, expat is not part of standard Python.
+      There is an older, deprecated module, xmllib, which uses regular
+      expressions for parsing. While deprecated, this module is still
+      the most convenient introduction to XML handling with Python.
+      It's also far more &#8216;Pythonic' in feel than the Sax module,
+      which is based on the way Java does things.
+    </p><p>We'll create a special module that will use
+      xmllib to parse an XML document and generate PyQt signals for
+      all elements of that document. It is easy to connect these
+      signals to another object (for instance, a PyQt
+      <tt class="CLASSNAME">QListView</tt> which can show the XML document
+      in a treeview). But it would be just as easy to create a
+      formatter object that would present the data as HTML. A slightly
+      more complicated task would be to create a formatter object that
+      would apply XSLT transformations to the XML document &#8212;
+      that is, it would format the XML using stylesheets. Using
+      signals and slots, you can connect more than one transformation
+      to the same run of the parser. A good example would be a
+      combination of a GUI interface, a validator, and a statistics
+      calculator.</p><p>The next example is very simple. It is easy to extend,
+    though, with special nodes for comments, a warning message
+    box for errors, and more columns for attributes.</p><div class="EXAMPLE"><a name="AEN1825"></a><p><b>Example 7-9. An XML parser with signals and slots</b></p><pre class="PROGRAMLISTING">#
+# qtparser.py &#8212; a simple parser that, using xmllib,
+# generates a signal for every parsed XML document.
+#
+
+import sys
+import xmllib                                              <a name="XMLLIB"><img src="qobject_signals_example_fichiers/1.htm" alt="(1)" border="0" vspace="0" hspace="0"></a>
+from qt import *
+
+TRUE=1                                                     <a name="TRUE"><img src="qobject_signals_example_fichiers/2.htm" alt="(2)" border="0" vspace="0" hspace="0"></a>
+FALSE=0
+        </pre><div class="CALLOUTLIST"><dl compact="COMPACT"><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#XMLLIB"><img src="qobject_signals_example_fichiers/1.htm" alt="(1)" border="0" vspace="0" hspace="0"></a></dt><dd>We import the deprecated
+              xmllib module. It is deprecated because the sax module,
+              which uses the expat library, is a lot faster.
+              The xmllib module is far easier to use, however, and since it
+              uses regular expressions for its parsing, it is
+              available everywhere, while the expat library must be
+              compiled separately.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#TRUE"><img src="qobject_signals_example_fichiers/2.htm" alt="(2)" border="0" vspace="0" hspace="0"></a></dt><dd>It is often convenient to
+          define constants for the boolean values true and false.</dd></dl></div><pre class="PROGRAMLISTING">class Parser(xmllib.XMLParser):                            <a name="CLASS"><img src="qobject_signals_example_fichiers/1.htm" alt="(1)" border="0" vspace="0" hspace="0"></a>
+
+    def __init__(self, qObject,  *args):                   <a name="CONSTRUCTOR"><img src="qobject_signals_example_fichiers/2.htm" alt="(2)" border="0" vspace="0" hspace="0"></a>
+        xmllib.XMLParser.__init__(self)
+        self.qObject=qObject
+
+    def start(self, document):                             <a name="START"><img src="qobject_signals_example_fichiers/3.htm" alt="(3)" border="0" vspace="0" hspace="0"></a>
+        xmllib.XMLParser.feed(self, document)
+        xmllib.XMLParser.close(self)
+
+        </pre><div class="CALLOUTLIST"><dl compact="COMPACT"><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#CLASS"><img src="qobject_signals_example_fichiers/1.htm" alt="(1)" border="0" vspace="0" hspace="0"></a></dt><dd>This is the <tt class="CLASSNAME">Parser</tt> class. It
+              inherits the <tt class="CLASSNAME">XMLParser</tt> class from
+              the xmllib module. The <tt class="CLASSNAME">XMLParser</tt>
+              class can be used in two ways: by overriding a set of
+              special methods that are called when the parser
+              encounters a certain kind of XML element, or by
+              overriding a variable, <tt class="VARNAME">self.elements</tt>,
+              which refers to a dictionary of tag-to-method mappings.
+              Overriding <tt class="VARNAME">self.elements</tt> is very
+              helpful if you are writing a parser for a certain DTD or
+              XML document type definition, though it is not the way
+              to go for a generic XML structure viewer (such as the
+              one we are making now).</dd><dd><p>An example for a Designer ui file could contain the
+          following definition:</p></dd><pre class="PROGRAMLISTING">self.elements={'widget'  : (self.start_widget,
+                            self.end_widget)
+              ,'class'   : (self.start_class,
+                            self.end_class)
+              ,'property': (self.start_property,
+                            self.end_property)
+              ,name'     : (self.start_name,
+                            self.end_name)}
+          </pre><dd><p>The keys to this dictionary are the actual tag
+              strings. The tuple that follows the key consists of the
+              functions that should be called for the opening and the
+              ending tag. If you don't want a function to be called,
+              enter None. Of course, you must implement these
+              functions yourself, in the derived parser class.</p></dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#CONSTRUCTOR"><img src="qobject_signals_example_fichiers/2.htm" alt="(2)" border="0" vspace="0" hspace="0"></a></dt><dd>The first argument (after self, of course) to the
+              constructor is a QObject. Multiple inheritance isn't a
+              problem in Python, generally speaking, but you cannot
+              multiply inherit from PyQt classes. Sip gets hopelessly
+              confused if you do so. So we pass a
+              <tt class="CLASSNAME">QObject</tt> to the constructor of the
+              <tt class="CLASSNAME">Parser</tt> class. Later, we will have
+              this <tt class="CLASSNAME">QObject</tt> object emit the
+              necessary signals.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#START"><img src="qobject_signals_example_fichiers/3.htm" alt="(3)" border="0" vspace="0" hspace="0"></a></dt><dd>The <tt class="FUNCTION">start</tt>
+            function takes a string as its parameter. This string
+            should contain the entire XML document. It is
+            also possible to rewrite this function to read a file line by
+            line; the default approach makes it difficult to work with
+            really large XML files. Reading a file line by line is a
+            lot easier on your computer's memory. You should call
+            <tt class="FUNCTION">close()</tt> after the last bit of text
+            has been passed to the parser.</dd></dl></div><pre class="PROGRAMLISTING">    #
+    # Data handling functions                              <a name="DATA-HANDLING"><img src="qobject_signals_example_fichiers/1.htm" alt="(1)" border="0" vspace="0" hspace="0"></a>
+    #
+    def handle_xml(self, encoding, standalone):            <a name="DH1"><img src="qobject_signals_example_fichiers/2.htm" alt="(2)" border="0" vspace="0" hspace="0"></a>
+        self.qObject.emit(PYSIGNAL("sigXML"),
+                          (encoding, standalone))
+                                                           <a name="DH2"><img src="qobject_signals_example_fichiers/3.htm" alt="(3)" border="0" vspace="0" hspace="0"></a>
+    def handle_doctype(self, tag, pubid, syslit, data):
+        self.qObject.emit(PYSIGNAL("sigDocType"),
+                         (tag, pubid, syslit, data,))      <a name="DH3"><img src="qobject_signals_example_fichiers/4.htm" alt="(4)" border="0" vspace="0" hspace="0"></a>
+
+    def handle_data(self, data):
+        self.qObject.emit(PYSIGNAL("sigData"),(data,))     <a name="DH4"><img src="qobject_signals_example_fichiers/5.htm" alt="(5)" border="0" vspace="0" hspace="0"></a>
+
+    def handle_charref(self, ref):
+        self.qObject.emit(PYSIGNAL("sigCharref"),(ref,))   <a name="DH5"><img src="qobject_signals_example_fichiers/6.htm" alt="(6)" border="0" vspace="0" hspace="0"></a>
+
+    def handle_comment(self, comment):
+        self.qObject.emit(PYSIGNAL("sigComment"),(comment,))<a name="DH6"><img src="qobject_signals_example_fichiers/7.htm" alt="(7)" border="0" vspace="0" hspace="0"></a>
+
+    def handle_cdata(self, data):
+        self.qObject.emit(PYSIGNAL("sigCData"),(data,))    <a name="DH7"><img src="qobject_signals_example_fichiers/8.htm" alt="(8)" border="0" vspace="0" hspace="0"></a>
+
+    def handle_proc(self, data):
+        self.qObject.emit(PYSIGNAL("sigProcessingInstruction"),<a name="DH8"><img src="qobject_signals_example_fichiers/9.htm" alt="(9)" border="0" vspace="0" hspace="0"></a>
+                         (data,))
+
+    def handle_special(self, data):                        <a name="DH9"><img src="qobject_signals_example_fichiers/10.htm" alt="(10)" border="0" vspace="0" hspace="0"></a>
+        self.qObject.emit(PYSIGNAL("sigSpecial"), (data,))
+
+    def syntax_error(self, message):                       <a name="DH10"><b>(11)</b></a>
+        self.qObject.emit(PYSIGNAL("sigError"),(message,))
+
+    def unknown_starttag(self, tag, attributes):           <a name="DH11"><b>(12)</b></a>
+        self.qObject.emit(PYSIGNAL("sigStartTag"),
+                         (tag,attributes))
+                                                           <a name="DH12"><b>(13)</b></a>
+    def unknown_endtag(self, tag):
+        self.qObject.emit(PYSIGNAL("sigEndTag"),(tag,))
+                                                           <a name="DH13"><b>(14)</b></a>
+    def unknown_charref(self, ref):
+        self.qObject.emit(PYSIGNAL("sigCharRef"),(ref,))
+
+    def unknown_entityref(self, ref):
+        self.qObject.emit(PYSIGNAL("sigEntityRef"),(ref,))
+        </pre><div class="CALLOUTLIST"><dl compact="COMPACT"><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#DATA-HANDLING"><img src="qobject_signals_example_fichiers/1.htm" alt="(1)" border="0" vspace="0" hspace="0"></a></dt><dd>The
+              xmllib.<tt class="CLASSNAME">XMLParser</tt> class defines a
+              number of methods that should be overridden if you want
+              special behavior. Even though we will only use the
+              methods that are called when a document is started and
+              when a simple element is opened and closed, I've
+              implemented all possible functions here.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#DH1"><img src="qobject_signals_example_fichiers/2.htm" alt="(2)" border="0" vspace="0" hspace="0"></a></dt><dd>Every valid XML document should
+              start with a magic text that declares itself to be XML
+              &#8212; note that that the .ui Designer files don't
+              comply with this requirement. This method is fired (and
+              thus the signal is fired) when the parser encounters
+              this declaration. Normally, it looks like this:
+              <tt class="LITERAL">&lt;?xml version="1.0"
+                standalone="no"?&gt;</tt>, with the minor
+              variation that standalone can also have the value "yes".
+          </dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#DH2"><img src="qobject_signals_example_fichiers/3.htm" alt="(3)" border="0" vspace="0" hspace="0"></a></dt><dd>If an XML document has a
+              documenttype, this method is called. A doctype
+              declaration looks like this:</dd><pre class="SCREEN">&lt;!DOCTYPE book PUBLIC "-//Norman Walsh//DTD DocBk XML V3.1.4//EN"
+     "http://nwalsh.com/docbook/xml/3.1.4/db3xml.dtd"&gt;
+            </pre><dd><p>and points to a DTD &#8212; a
+              description of what's allowed in this particular kind of
+              XML document.
+          </p></dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#DH3"><img src="qobject_signals_example_fichiers/4.htm" alt="(4)" border="0" vspace="0" hspace="0"></a></dt><dd>There can be data in between the tags in an XML document,
+            just as with the text in a HTML document. This function is
+            called when the parser encounters such data.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#DH4"><img src="qobject_signals_example_fichiers/5.htm" alt="(5)" border="0" vspace="0" hspace="0"></a></dt><dd>In XML, you can use special
+              characters that are entered with  &amp;#, a number, and
+              closed with a semicolon. Python's xmllib will want to
+              translate this to an ASCII character. You cannot use
+              xmllib to parse documents that contain references to
+              Unicode characters.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#DH5"><img src="qobject_signals_example_fichiers/6.htm" alt="(6)" border="0" vspace="0" hspace="0"></a></dt><dd>XML has the same kind of comments as HTML. Most
+          parsers simply pass the comments, but if you want to show
+          them (for instance, in a structured view of an XML document)
+          or if you want to preserve the contents of the file exactly,
+          you can connect a slot to the signal emitted by this function.
+          </dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#DH6"><img src="qobject_signals_example_fichiers/7.htm" alt="(7)" border="0" vspace="0" hspace="0"></a></dt><dd>CDATA is literal data enclosed
+              between <tt class="LITERAL">&lt;![CDATA[</tt> and
+              <tt class="LITERAL">]]&gt;</tt>. A file containing </dd><pre class="SCREEN">&lt;![CDATA[surely you will be allowed to
+starve to death in one of the royal parks.]]&gt;
+            </pre><dd><p>will present the quote
+              &#8216;surely you will be allowed to starve to death in
+              one of the royal parks.' to any slot that is connected
+              to <tt class="FUNCTION">sigCData</tt>.</p></dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#DH7"><img src="qobject_signals_example_fichiers/8.htm" alt="(8)" border="0" vspace="0" hspace="0"></a></dt><dd>This is called when the XML document
+              contains processing instructions. A processing
+              instruction begins with &lt;?. All special cases, such
+              as the XML declaration itself, are handled by other
+              methods.
+          </dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#DH8"><img src="qobject_signals_example_fichiers/9.htm" alt="(9)" border="0" vspace="0" hspace="0"></a></dt><dd>You can declare entities in XML
+              &#8212; references to something externally defined.
+              Those start with &lt;!. The contents of the declaration
+              will be passed on in the <tt class="VARNAME">data</tt>
+              argument.
+
+          </dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#DH9"><img src="qobject_signals_example_fichiers/10.htm" alt="(10)" border="0" vspace="0" hspace="0"></a></dt><dd>XML is far less forgiving than HTML
+              (or at least, XML has both a stricter definition and
+              less easy-going parsers), and whenever an error is
+              encountered, such as forgetting to close a tag, this
+              method is called.
+          </dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#DH10"><b>(11)</b></a></dt><dd>              <tt class="FUNCTION">unknown_starttag</tt> is the most
+              interesting method in the
+              <tt class="CLASSNAME">xmllib.XMLParser</tt> class. This is
+              called whenever the xmllib parser encounters a plain tag
+              that is not present in its <tt class="VARNAME">elements</tt>
+              dictionary. That is, it will be called for all elements
+              in our current implementation.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#DH11"><b>(12)</b></a></dt><dd>Likewise,
+              <tt class="FUNCTION">unknown_endtag</tt> is called for the
+              corresponding ending tags.
+          </dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#DH12"><b>(13)</b></a></dt><dd>Whenever the parser encounters an unresolvable numeric
+          character reference, this function is called.
+          </dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#DH13"><b>(14)</b></a></dt><dd>Unknown entities are forbidden in
+              XML &#8212; if you use an entity somewhere in your
+              document (which you can do by placing the name of the
+              entity between an ampersand and a semicolon), then it
+              must be declared. However, you might want to catch
+              occurrences of unknown entities and do something
+              special. That's why the function
+              <tt class="FUNCTION">unknown_entityref</tt> is implemented
+              here. By default <tt class="FUNCTION">unknown_entityref</tt>
+              calls the <tt class="FUNCTION">syntax_error()</tt> function
+              of <tt class="CLASSNAME">xmllib.XMLParser</tt>.
+          </dd></dl></div><p>The <tt class="CLASSNAME">TreeView</tt> class will show the
+        contents of the XML file.</p><pre class="PROGRAMLISTING">class TreeView(QListView):                                 <a name="TVCLASS"><img src="qobject_signals_example_fichiers/1.htm" alt="(1)" border="0" vspace="0" hspace="0"></a>
+
+    def __init__(self, *args):
+        apply(QListView.__init__,(self, ) + args)
+        self.stack=[]                                      <a name="TVSTACK"><img src="qobject_signals_example_fichiers/2.htm" alt="(2)" border="0" vspace="0" hspace="0"></a>
+        self.setRootIsDecorated(TRUE)                      <a name="TVDECORATION"><img src="qobject_signals_example_fichiers/3.htm" alt="(3)" border="0" vspace="0" hspace="0"></a>
+        self.addColumn("Element")                          <a name="TVCOLS"><img src="qobject_signals_example_fichiers/4.htm" alt="(4)" border="0" vspace="0" hspace="0"></a>
+
+    def startDocument(self, tag, pubid, syslit, data):     <a name="TVF1"><img src="qobject_signals_example_fichiers/5.htm" alt="(5)" border="0" vspace="0" hspace="0"></a>
+        i=QListViewItem(self)
+        if tag == None: tag = "None"
+        i.setText(0, tag)
+        self.stack.append(i)
+
+    def startElement(self, tag, attributes):               <a name="TVF2"><img src="qobject_signals_example_fichiers/6.htm" alt="(6)" border="0" vspace="0" hspace="0"></a>
+        if tag == None: tag = "None"
+        i=QListViewItem(self.stack[-1])
+        i.setText(0, tag)
+        self.stack.append(i)
+
+    def endElement(self, tag):                             <a name="TVF3"><img src="qobject_signals_example_fichiers/7.htm" alt="(7)" border="0" vspace="0" hspace="0"></a>
+        del(self.stack[-1])
+      </pre><div class="CALLOUTLIST"><dl compact="COMPACT"><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#TVCLASS"><img src="qobject_signals_example_fichiers/1.htm" alt="(1)" border="0" vspace="0" hspace="0"></a></dt><dd>The <tt class="CLASSNAME">TreeView</tt>
+              class is a simple subclass of PyQt's versatile
+              <tt class="CLASSNAME">QListView</tt> class.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#TVSTACK"><img src="qobject_signals_example_fichiers/2.htm" alt="(2)" border="0" vspace="0" hspace="0"></a></dt><dd>Because XML is a hierarchical file
+              format, elements are neatly nested in each other. In
+              order to be able to create the right treeview, we should
+              keep a stack of the current element depth. The last
+              element of the stack will be the parent element of all
+              new elements.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#TVDECORATION"><img src="qobject_signals_example_fichiers/3.htm" alt="(3)" border="0" vspace="0" hspace="0"></a></dt><dd>This option sets the beginning of
+              the tree at the first element, making it clear to the
+              user that it's an expandable tree instead of a simple
+              list.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#TVCOLS"><img src="qobject_signals_example_fichiers/4.htm" alt="(4)" border="0" vspace="0" hspace="0"></a></dt><dd>We present only one column in the
+              listview &#8212; if you want to show the attributes of
+              elements, too, you might add a few more columns.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#TVF1"><img src="qobject_signals_example_fichiers/5.htm" alt="(5)" border="0" vspace="0" hspace="0"></a></dt><dd>The
+              <tt class="FUNCTION">startDocument</tt> function is called
+              when the XML document is opened. It also starts the call
+              stack by creating the first element. The first
+              <tt class="CLASSNAME">QListViewItem</tt> object has the
+              listview as a parent; all others with have a
+              <tt class="CLASSNAME">QListViewItem</tt> object as parent.
+              The constructor of <tt class="CLASSNAME">QListViewItem</tt>
+              is so overloaded that sip tends to get confused, so I
+              create the item and set its text separately.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#TVF2"><img src="qobject_signals_example_fichiers/6.htm" alt="(6)" border="0" vspace="0" hspace="0"></a></dt><dd>Whenever an element is opened, a
+          <tt class="CLASSNAME">QListViewItem</tt> item is created and
+          pushed on the stack, where it becomes the parent for newly
+          opened elements.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#TVF3"><img src="qobject_signals_example_fichiers/7.htm" alt="(7)" border="0" vspace="0" hspace="0"></a></dt><dd>Conversely, when the element is
+              closed, it is popped <span class="emphasis"><i class="EMPHASIS">from</i></span> the
+              stack.</dd></dl></div><pre class="PROGRAMLISTING">def main(args):
+
+    if (len(args) == 2):
+        app = QApplication(sys.argv)
+
+        QObject.connect(app, SIGNAL('lastWindowClosed()'),
+                        app, SLOT('quit()'))
+        w = TreeView()
+        app.setMainWidget(w)
+
+        o=QObject()                                        <a name="QOBJECT"><img src="qobject_signals_example_fichiers/1.htm" alt="(1)" border="0" vspace="0" hspace="0"></a>
+        p=Parser(o)                                        <a name="PARSER"><img src="qobject_signals_example_fichiers/2.htm" alt="(2)" border="0" vspace="0" hspace="0"></a>
+        QObject.connect(o, PYSIGNAL("sigDocType"),         <a name="CONNECTIONS"><img src="qobject_signals_example_fichiers/3.htm" alt="(3)" border="0" vspace="0" hspace="0"></a>
+                           w.startDocument)
+        QObject.connect(o, PYSIGNAL("sigStartTag"),
+                           w.startElement)
+        QObject.connect(o, PYSIGNAL("sigEndTag"),
+                           w.endElement)
+
+        s=open(args[1]).read()                             <a name="READING"><img src="qobject_signals_example_fichiers/4.htm" alt="(4)" border="0" vspace="0" hspace="0"></a>
+        p.start(s)
+
+        w.show()
+        app.exec_loop()
+    else:
+        print "Usage: python qtparser.py FILE.xml"
+
+if __name__=="__main__":
+    main(sys.argv)
+        </pre><div class="CALLOUTLIST"><dl compact="COMPACT"><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#QOBJECT"><img src="qobject_signals_example_fichiers/1.htm" alt="(1)" border="0" vspace="0" hspace="0"></a></dt><dd>Here we create a
+              <tt class="CLASSNAME">QObject</tt> which is used to emit all
+              necessary signals, since we cannot inherit from more
+              than one PyQt class at the same time. Note that by using
+              this technique, you don't have to subclass from
+              <tt class="CLASSNAME">QObject</tt> in order to be able to
+              emit signals. Sometimes delegation works just as
+              well.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#PARSER"><img src="qobject_signals_example_fichiers/2.htm" alt="(2)" border="0" vspace="0" hspace="0"></a></dt><dd>A parser object is created, with the
+              <tt class="CLASSNAME">QObject</tt> object as its argument.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#CONNECTIONS"><img src="qobject_signals_example_fichiers/3.htm" alt="(3)" border="0" vspace="0" hspace="0"></a></dt><dd>Before feeding the parser the text, all connections
+              we want are made from the <tt class="CLASSNAME">QObject</tt>
+              object (which we passed to the parser to make sure it
+              can emit signals) to the <tt class="CLASSNAME">TreeView</tt>
+              object that forms the main window.</dd><dt><a href="http://www.commandprompt.com/community/pyqt/x1807#READING"><img src="qobject_signals_example_fichiers/4.htm" alt="(4)" border="0" vspace="0" hspace="0"></a></dt><dd>The file whose name was given on the command
+              line is read and passed on to the parser. I have included
+              a very small test file, <tt class="FILENAME">test.xml</tt>,
+              but you can use any Designer UI design file.</dd></dl></div></div><p>This is a very simple and convenient way
+      of working with XML files and PyQt gui's &#8212; but it's
+      generally useful, too. The standard way of working with XML
+      files and parsers allows for only one function to be called for
+      each tag. Using signals and slots, you can have as many slots
+      connected to each signal as you want. For instance, you can have
+      not only a gui, but also an analyzer that produces statistics
+      listening in on the same parsing run.</p><div class="MEDIAOBJECT"><p></p><div class="CAPTION"><p>The result of parsing a Designer .ui file.</p></div></div><p>On a final note, there is one bug in this
+      code... See if you can find it, or consult
+     <a href="http://www.commandprompt.com/community/pyqt/x3270#CH2LISTVIEW">the Section called <i>QListView and QListViewItem</i> in Chapter 10</a> for an explanation.</p></div><div class="NAVFOOTER"><hr align="left" width="100%"><table summary="Footer navigation table" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td align="left" valign="top" width="33%"><a href="http://www.commandprompt.com/community/pyqt/x1631" accesskey="P">Prev</a></td><td align="center" valign="top" width="34%"><a href="http://www.commandprompt.com/community/pyqt/book1" accesskey="H">Home</a></td><td align="right" valign="top" width="33%"><a href="http://www.commandprompt.com/community/pyqt/x2026" accesskey="N">Next</a></td></tr><tr><td align="left" valign="top" width="33%">Disconnecting</td><td align="center" valign="top" width="34%"><a href="http://www.commandprompt.com/community/pyqt/c1267" accesskey="U">Up</a></td><td align="right" valign="top" width="33%">Conclusion</td></tr></tbody></table></div></div>
+        <br>
+
+          <div id="thefineprint">
+            <a href="http://www.commandprompt.com/products/mammothreplicator/"><img src="qobject_signals_example_fichiers/powered_by_mammoth.gif" alt="Powered by Mammoth PostgreSQL" title="Powered by Mammoth PostgreSQL" border="0"></a>
+                        <br>
+            Copyright © 2000-2008 Command Prompt, Inc. All Rights Reserved. All trademarks property of their respective owners.
+          </div>
+        </div>
+      </div>
+  </body></html>
