@@ -1,0 +1,16 @@
+>>> import win32com.client
+>>> iTunes = win32com.client.gencache.EnsureDispatch("iTunes.Application")
+>>> iTunes.LibrarySource.Playlists.ItemByName('Party Shuffle').PlayFirstTrack()
+>>> iTunes.Pause()
+>>> iTunes.Play()
+>>> iTunes.PreviousTrack()
+>>> iTunes.NextTrack()
+>>> iTunes.CurrentTrack.Name
+u'Would Not Come'
+>>> iTunes.SoundVolume
+50
+>>> iTunes.SoundVolume = 25
+>>> iTunes.SoundVolume
+25
+>>> iTunes.SoundVolume = 50
+>>> iTunes.Windows.Item(1).Minimized = True

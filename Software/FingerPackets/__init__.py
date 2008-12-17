@@ -17,7 +17,7 @@ EVENTUNDEFINED = 2
 if only 1 fingerID in the two is given, the final packet will have twice the same IDs (that follows our specification).
 if 2 fingerIDs are given, unless keyword parameters are used, the parameter order is still interpreted as in the function definition: fingerID2, fingerID1"""
 class FingerPacket(object):
-    def __init__(self, eventType=None, fingerID2=-1, fingerID1=-1, fromString=""):
+    def __init__(self, eventType=None, fingerID2=None, fingerID1=None, fromString=""):
         self._eventType = self._fingerID2 = self.fingerID1 = None
         self.easyRead = {"eventType":0, "fingerID2":0, "fingerID1":0}
         if fromString != "":
@@ -83,7 +83,7 @@ class FingerPacket(object):
         self._fingerID2 = value2binstr(randint(0, 7), 3)
         self._updateEasyRead()
         
-    def fromFieldValues(self,eventType, fingerID2=-1, fingerID1=-1):
+    def fromFieldValues(self,eventType, fingerID2=None, fingerID1=None):
         #---- PARAMETER CHECKING AND ADAPTATION ----
         #if uncorrect eventType value, exit with error
         if not eventType in (EVENTNOP, EVENTPRESSED, EVENTUNDEFINED, 3):
@@ -101,11 +101,11 @@ class FingerPacket(object):
         #if required to generate a button pressed packet
         elif eventType == EVENTPRESSED:
             header = "01"
-            given1 = False if fingerID1 == -1 else True
-            given2 = False if fingerID2 == -1 else True
+            given1 = False if fingerID1 == None else True
+            given2 = False if fingerID2 == None else True
             #if no event types given, exit with error
             if not given1 and not given2:
-                raise SyntaxError, ("for EVENTPRESSED events, function takes at least one parameter between 1 and 8; 0 given or value is -1.", )
+                raise SyntaxError, ("for EVENTPRESSED events, function takes at least one parameter between 1 and 8; 0 given or value is None.", )
             
             rightRange1 = True if self._rightEventTypeRange(fingerID1) else False
             rightRange2 = True if self._rightEventTypeRange(fingerID2) else False
@@ -142,7 +142,7 @@ class FingerPacket(object):
         b = self.toBinaryString()
         c = self.toChar()
         et = int(self._eventType, 2)
-        eventString = _eventTypeToString(et)
+        eventString = self._eventTypeConstantToString(et)
         return "FingerPacket: binary:%s character:'%s', eventType=%s, fingerID2=%d, fingerID1=%d" % (b,c, eventString, int(self._fingerID2, 2), int(self._fingerID1, 2))
         #2 param after % : c if eventString != "EVENTNOP" else '0'
 

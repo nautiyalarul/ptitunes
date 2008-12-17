@@ -1,0 +1,100 @@
+/* Copyright 2004 CommandPrompt, Inc. */
+
+body {
+    margin : 10px;
+    font: Helvetica, Arial;
+    font-size: 12pt;
+    padding: 0px;
+    background: #fff;
+}
+
+#diag_config_table { 
+                     border-collapse: collapse;
+                     }
+
+#diag_config_table tr { 
+                        background: #eeeeee;
+                        border: 1px solid black;
+                        }
+
+#diag_config_table td { 
+                        padding: 3px;
+                        }
+
+form { 
+       margin-bottom: 0;
+       }
+
+h3 {
+    margin-top: 0;
+}
+
+th { 
+     text-align: left;
+     border-bottom: 1px solid black;
+     font-size: 80%;
+     }
+
+.cycle_even {
+              background : #E8EBF0;
+              }
+
+.cycle_odd {
+             background : #ffffff;
+             }
+
+div.notice {
+             padding: 3px;
+             background: #DDFFDD;
+             border: 1px solid black;
+             color: black;
+             margin: 10px;
+             padding: 3px;
+             }
+
+div.error {
+            background: #FFBBBB;
+            border: 1px solid black;
+            margin: 10px;
+            padding: 3px;
+            color: black;
+            }
+
+div.warning {
+              background: #FFCCCC;
+              border: 1px solid black;
+              color: black;
+              margin: 10px;
+              padding: 3px;
+              }
+
+div.confirm {
+              background: #CCCCFF;
+              border: 1px solid black;
+              color: black;
+              padding: 3px;
+              }
+
+.niceHeader {
+              border-bottom: 2px solid black;
+              text-align: left;
+              width: 100%;
+              dislpay: block;
+              }
+
+a.management_nav {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+div#management_nav_bar {
+    -moz-border-radius: 10px;
+    background: lightblue;
+    margin-bottom: 3px;
+}
+
+pre {
+    background: WhiteSmoke;
+    border: 1px solid Navy;
+    padding: 4px;
+}

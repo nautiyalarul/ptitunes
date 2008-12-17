@@ -4,6 +4,7 @@ from FingerPackets import *
 import serial
 import time
 
+#tells the most present character in a string
 def whatsMostFrequent(buf):
     found = {}
     maxi = 0
@@ -18,100 +19,188 @@ def whatsMostFrequent(buf):
             wheremaxi = a
     return wheremaxi
 
-def listen():
-    #open COM 7
-    s = serial.Serial(6) 
-    fp = FingerPacket()
-    lastMostFrequent = '0'
-    pressStarted = False
-    dragStartBtnID = -1
-    dragEndBtnID = -1
-    dragPath = []
-    while 1:
+#returns the elements common and not None in the s1 and s2 sets
+#returns None if no such elements
+def commonElements(s1, s2):
+    i = s1.intersection(s2)
+    #any(i) : if i is not full of None/False elements
+    return i if len(i) > 0 and any(i) else None
+
+""">>> a = set([3,4])
+>>> b = set([4,5])
+>>> a - b
+set([3])
+>>> b -a
+set([5])"""
+#returns the elements not in common and not None in the s1 and s2 sets in this order:
+#[first element of s1 found not present in s2, first element of s2 found not present in s1]
+#returns None if no such elements
+def differentElements(s1, s2):
+    differentInS1 = (s1-s2)[0]
+    differentInS2 = (s2-s1)[0]
+    #any(i) : if i is not full of None/False elements
+    return [differentInS1, differentInS2] if len(i) > 0 and any(i) else None
+
+
+
+class PacketsListener:
+    def __init__(self, setupAndListenDirectly=True):
+        self.s = None
+        self.fp = FingerPacket()
+        self.lastMostFrequent = '0'
+        self.pressStarted = False
+        self.pressedButtons = set([])
+        self.dragStartBtns = None
+        self.dragEndBtns = None
+        self.dragPath = []
+        self.defaultActuator = iTunesActuator
+        self.currentActuator = self.defaultActuator
+        if setupAndListenDirectly:
+            self.openConnection()
+            
+    def __del__(self):
+        self.closeConnection()
+    
+    def setActuator(self, act):
+        self.currentActuator = act
+    
+    def setDefaultActuator(self, act):
+        self.currentActuator = defaultActuator
+    
+    def openConnection(self):
+        try:
+            #open COM 7
+            self.s = serial.Serial(6) 
+        except:
+            return False
+        return True
+    
+    def closeConnection(self):
+        if self.s != None:
+            self.s.close()
+        return True
+
+    #call this function with a timer or in between sleeps
+    def listenOnce(self):
         #read by blocks of 32 bytes
-        buf = s.read(32)
+        try:
+            buf = self.s.read(32)
+        except:
+            return False
         mostFrequent = whatsMostFrequent(buf)
-        #if event change from last read to current read
-        if mostFrequent != lastMostFrequent:
-            fp.fromChar(mostFrequent)
-            et = fp.easyRead["eventType"]
+        #ON PACKET EXACT DATA CHANGE
+        if mostFrequent != self.lastMostFrequent:
+            self.fp.fromChar(mostFrequent)
+            et = self.fp.easyRead["eventType"]
+            #ON PRESS
             if et == EVENTPRESSED:
-                    pressedBtnID = fp.easyRead["fingerID1"]
-                    if not pressStarted:
-                        pressStarted = True
-                        dragStartBtnID = pressedBtnID
-                    #if 1 button is pressed, ok we take it
-                    #& let's assume that if 2 buttons are pressed, they are very close to gether
-                    #note the dragging path along in a list
-                    else:
-                        dragPath.append(pressedBtnID)
+                    self.pressedButtons.clear()
+                    for a in ("1", "2"): self.pressedButtons.add(self.fp.easyRead["fingerID"+a])
+                    #START RECORDING PRESSES POSITIONS IF NOT STARTED
+                    if not self.pressStarted:
+                        self.pressStarted = True
+                        self.dragStartBtns = self.pressedButtons
+                        emitHighLevelEvent("press_start",self.pressedButtons)
+                    #add the pressed button to the dragPath
+                    self.dragPathBtns.append(self.pressedButtons)
+            #on NOTHING/UNDEFINED (no more PRESS)
             else:
+                print "OTHER EVENT"
                 #if we had started noting press & there's no press anymore
-                if pressStarted:
-                    pressStarted = False
-                    dragEndBtnID = fp.easyRead["fingerID2"]
+                #STOP RECORDING AND ANALYZE STUFF TO LOOK FOR 1. DRAGGING 2. RELEASE
+                if self.pressStarted:
+                    self.pressStarted = False
+                    self.dragEndBtns = self.dragPathBtns[len(self.dragPathBtns)-1]
                     #if we did not end our dragging where we started <=> if this is a real dragging
                     #(assuming that the user does not move fingers  back&forth nor  does full revolutions)
-                    if dragEndBtnID != dragStartBtnID:
-                        l = len(dragPath)
+                    de = differentElements(self.dragStartBtns, self.dragEndBtns)
+                    #if drag and start buttons are the same
+                    if not de:
+                            emitHighLevelEvent("release", self.dragEndBtns)
+                    #IF DRAG HAS DIFFERENT START AND END BUTTONS=> DRAG EVENT
+                    else :
+                        l = len(self.dragPathBtns)
+                        #if less than 2 buttons recorded while dragging => error/skip
                         if l < 2:
                             print "There must be a problem... this is a real drag and there's less than 2 buttons recorded in path."
-                        #if startButton + 1 middleButton+endButton
-                        else if l == 3: 
+                        #if 2 btns recording while dragging, startButton + 1 middleButton+endButton
+                        if l == 2:
+                            cpy = [de[0],  None,  de[1]]
+                            emitHighLevelEvent("drag", cpy)
+                            del cpy
+                        #if there are 3 or more buttons in path, find the closest button (closestElem) which is not
+                        #start or middle button and is closest to middle
+                        elif l >= 3: 
                             
-                            #we make a copy of the dragPath because we know list simple copy is just reference copy
-                            cpy = [i for i in dragPath]
+                            dragPathElementsNotInStartAndEnd = set(self.dragPathBtns) - de
+                            minDist = 500
+                            middleIndex = len(self.dragPathBtns)/2
+                            closestElem = None
+                            for pos, el in enumerate(self.dragPathBtns):
+                                if el in dragPathElementsNotInStartAndEnd:
+                                    d= abs(pos-middleIndex)
+                                    if d<minDist:
+                                        minDist = d
+                                        closestElem = el
+                            if closestElem == None:
+                                print "man learn to code... putting None for middle drag button anyway..."
+                                closestElem = None
+                            cpy = [de[0], closestElem, de[1]]
                             #3 btn for a path is enough info to send for high level analysis (CCW ? CW...)
                             emitHighLevelEvent("drag", cpy)
                             del cpy
-                        #if we have more than 3 events
-                        else:
-                            #we look for a button closest to the middle that is not the start or end buttons
-                            middleID = len(dragPath)/2 #integer division == lower
-                            m = dragPath[middleID]
-                            #if the middle button in the drag list is different from start and end
-                            #we take it and search futher
-                            if m != dragStartBtnID and m!= dragEndBtnID:
-                                cpy = [dragStartBtnID, m, dragEndBtnID]
-                                emitHighLevelEvent("drag", cpy)
-                                del cpy
-                            #if the middle button is not different from end and start
-                            #we browse the whole list
-                            else:
-                                foundMiddle = None
-                                posMiddle = dragStartBtnID
-                                lastClosestDistance = 30
-                                for m in dragPath:
-                                    if m != dragStartBtnID and m != dragEndBtnID:
-                                        foundMiddle = m
-                                        if abs(posMiddle-middleID) < 30:
-                                            #TODO
-                            #right search
-                            for a in dragPath[middleID:]:
-                                if 
-                            
-                            
-                    dragStartBtnID = -1
-                    dragEndBtnID = -1
-                    pressStarted = False
-                    dragPath = []
-            mapActionToEvent(fp)
-            print fp
-        time.sleep(1)
+                                    
+                    #whether drag start != drag end or not...
+                    #we have finished dragging and whether we noted useful or not
+                    #we clear the data for a next dragging
+                        #clear dragging things for next dragging happening
+                        self.dragStartBtns.clear()
+                        self.dragEndBtns.clear()
+                    #clear dragging & button press/release things for next dragging happening
+                    self.pressedButtons.clear()
+                    self.pressStarted = False
+                    self.dragPathBtns = []
+        return True
 
-def emitHighLevelEvent():
-
-def mapActionToEvent(finishedEventChar):
-    et = finishedEventChar.easyRead["eventType"]
-    bt1 = et.easyRead["buttonID1"]
-    bt2 = et.easyRead["buttonID2"]
-    #if pressed
-    if et == EVENTPRESSED:
-        #if single release (two same buttons <=> single button pressed)
-        if bt1 == bt2:
-            onRelease(bt1)
-        #if double release (or more.. but only the board tells only about the first two buttons)
-        else:
-            onDouble(bt1, bt2)
+    #highLevelEventStringID may be : "press_start" "drag" or "release"
+    #"press_start" : data is a set([]) of at most button IDs
+    #"release" : same kind as for "press_start"
+    #"drag" : [startButtonId,None or MiddleButtonId, endButtonId]
+    def emitHighLevelEvent(self, evtStr,data):
+        print "highlevelevent:", evtStr, "data:", data
+        if evtStr == "press_start":
+            print "press_start", data
+            for a in data:
+                setButtonState(a, True)
+        elif evStr == "drag":
+            for a in data:
+                setButtonState(a, True, 1)
         
-listen()
+        #pass message to select actuator
+
+
+class Actuator:
+    def __init__(self):
+        #init something here... like start iTunes
+        pass
+    
+    def __del__(self):
+        #close something here
+        pass
+        
+    #returns ("Event Type", "Details (ie buttons pressed)", "Action name done")
+    def act(self, evStr, data):
+        if evStr == "release":
+            
+
+def setButtonState(buttonId, enable, forNsecondsOnly=0):
+    buttons[buttonId].setPressed(enable)
+    if forNseconds:
+        #put a timer once
+        pass
+
+
+
+if __name__ == "__main__":
+    pl = PacketsListener()
+    pl.
