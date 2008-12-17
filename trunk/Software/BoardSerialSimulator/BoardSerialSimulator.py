@@ -10,6 +10,7 @@ import time
 class BoardSerialSimulator:
     def __init__(self,portToSendTo):
         #create a new Serial object onto variable self.s
+        print "hop"
         self.setPort(portToSendTo)
         self.fp = FingerPacket()
 
@@ -21,21 +22,32 @@ class BoardSerialSimulator:
             self.s.close()
         #remove previous port and create a new one to the new port address
         self.s = Serial(portToSendTo) 
+        print "BoardSerialSimulator: could connect object"
         
     def start(self):
+        cpt = 0
         if not hasattr(self, 's'):
             raise Exception,("port unset, use setPort() first",)
+        self.fp.fromFullRandom()
         while self.s.isOpen():
-            self.fp.fromFullRandom()
-            newChar = self.fp.toChar()
-            #self.s.write(newChar * 200)
-            #self.fp.fromFieldValues(EVENTPRESSED, 1)
-            #newChar = self.fp.toChar()
-            print "sending===>", self.fp
-            self.s.write(newChar*32)
+            cpt+=1
+            if cpt > 10 and cpt < 15:
+                print "BoardSimulator : drag mode"
+                self.fp.fromFieldValues(EVENTPRESSED, randint(0, 7))
+                newChar = self.fp.toChar()
+                print "sending===>", self.fp
+                self.s.write(newChar*32)
+            elif cpt > 20:
+                cpt=0
+            else:
+                self.fp.fromFullRandom()
+                newChar = self.fp.toChar()
+                print "sending===>", self.fp
+                self.s.write(newChar*32)
             time.sleep(1)
 
-a = BoardSerialSimulator(7)
-print "starting"
-a.start()
-print "done"
+if __name__ == "__main__":
+    a = BoardSerialSimulator(7)
+    print "starting"
+    a.start()
+    print "done"

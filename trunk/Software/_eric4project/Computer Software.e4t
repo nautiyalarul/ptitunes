@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-4.2.dtd">
 <!-- eric4 tasks file for project Computer Software -->
-<!-- Saved: 2008-12-15, 20:32:46 -->
+<!-- Saved: 2008-12-17, 18:31:50 -->
 <Tasks version="4.2">
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: random number of packet per event</Summary>
     <Description></Description>
-    <Created>2008-12-15, 15:58:23</Created>
+    <Created>2008-12-17, 16:56:29</Created>
     <Resource>
       <Filename>BoardSerialSimulator/BoardSerialSimulator.py</Filename>
       <Linenumber>7</Linenumber>
@@ -15,7 +15,7 @@
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: quick packets/noise</Summary>
     <Description></Description>
-    <Created>2008-12-15, 15:58:23</Created>
+    <Created>2008-12-17, 16:56:29</Created>
     <Resource>
       <Filename>BoardSerialSimulator/BoardSerialSimulator.py</Filename>
       <Linenumber>8</Linenumber>
